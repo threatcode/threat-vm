@@ -3,8 +3,13 @@
 set -eu
 
 IMAGE=kali-rolling/vm-builder
-OPTS=(
-    --rm --interactive --tty --net host
+
+OPTS=()
+if [ -t 0 ]; then
+    OPTS+=(--interactive --tty)
+fi
+OPTS+=(
+    --rm --net host
     --device /dev/kvm --group-add $(stat -c "%g" /dev/kvm)
     --security-opt label=disable
     --volume $(pwd):/recipes --workdir /recipes
