@@ -29,7 +29,13 @@ else
     exit 1
 fi
 
-bold() { tput bold; echo "$@"; tput sgr0; }
+# Output bold only if both stdout/stderr are opened on a terminal
+# From ./build.sh
+if [ -t 1 -a -t 2 ]; then
+    bold() { tput bold; echo -n "$@"; tput sgr0; }
+else
+    bold() { echo -n "$@"; }
+fi
 vrun() { bold "$" "$@"; "$@"; }
 vexec() { bold "$" "$@"; exec "$@"; }
 
