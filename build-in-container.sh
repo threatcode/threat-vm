@@ -29,7 +29,12 @@ else
     exit 1
 fi
 
-bold() { tput bold; echo "$@"; tput sgr0; }
+# Output bold only if both stdout/stderr are opened on a terminal
+if [ -t 1 -a -t 2 ]; then
+    bold() { tput bold; echo "$@"; tput sgr0; }
+else
+    bold() { echo "$@"; }
+fi
 vrun() { bold "$" "$@"; "$@"; }
 vexec() { bold "$" "$@"; exec "$@"; }
 
