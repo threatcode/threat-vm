@@ -30,11 +30,10 @@ else
 fi
 
 # Output bold only if both stdout/stderr are opened on a terminal
-# From ./build.sh
 if [ -t 1 -a -t 2 ]; then
-    bold() { tput bold; echo -n "$@"; tput sgr0; }
+    bold() { tput bold; echo "$@"; tput sgr0; }
 else
-    bold() { echo -n "$@"; }
+    bold() { echo "$@"; }
 fi
 vrun() { bold "$" "$@"; "$@"; }
 vexec() { bold "$" "$@"; exec "$@"; }
