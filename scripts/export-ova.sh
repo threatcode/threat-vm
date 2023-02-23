@@ -42,6 +42,9 @@ tar -cvf $image.ova $image.ovf $image.vmdk $image.mf
 # Since the disk is already compressed (streamOptimized means
 # deflate compression with zlib),  there's nothing to gain by
 # compressing the .ova again. So we ignore the '-z' option.
+if [ $zip -eq 1 ]; then
+    echo "INFO: Disk already compressed, ignoring -z option"
+fi
 
 for fn in $image.*; do
     [ $(stat -c %Y $fn) -ge $START_TIME ] && echo $fn
