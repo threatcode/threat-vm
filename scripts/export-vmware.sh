@@ -2,6 +2,7 @@
 
 set -eu
 
+SCRIPTSDIR=$RECIPEDIR/scripts
 START_TIME=$(date +%s)
 
 image=
@@ -27,7 +28,7 @@ qemu-img convert -O vmdk -o subformat=twoGbMaxExtentSparse \
 [ $keep -eq 1 ] || rm -f $image.raw
 
 echo "INFO: Generate $image.vmx"
-$RECIPEDIR/scripts/generate-vmx.sh $image.vmwarevm/$image.vmdk
+$SCRIPTSDIR/generate-vmx.sh $image.vmwarevm/$image.vmdk
 
 if [ $zip -eq 1 ]; then
     echo "INFO: Compress to $image.7z"

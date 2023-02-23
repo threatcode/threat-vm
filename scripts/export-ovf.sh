@@ -2,6 +2,7 @@
 
 set -eu
 
+SCRIPTSDIR=$RECIPEDIR/scripts
 START_TIME=$(date +%s)
 
 image=
@@ -25,10 +26,10 @@ qemu-img convert -O vmdk $image.raw $image.vmdk
 [ $keep -eq 1 ] || rm -f $image.raw
 
 echo "INFO: Generate $image.ovf"
-$RECIPEDIR/scripts/generate-ovf.sh $image.vmdk
+$SCRIPTSDIR/generate-ovf.sh $image.vmdk
 
 echo "INFO: Generate $image.mf"
-$RECIPEDIR/scripts/generate-mf.sh $image.ovf $image.vmdk
+$SCRIPTSDIR/generate-mf.sh $image.ovf $image.vmdk
 
 if [ $zip -eq 1 ]; then
     echo "INFO: Compress to $image.7z"
