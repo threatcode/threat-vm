@@ -4,8 +4,8 @@ set -eu
 
 START_TIME=$(date +%s)
 
-keep=0
 image=
+keep=0
 zip=0
 
 while [ $# -gt 0 ]; do
