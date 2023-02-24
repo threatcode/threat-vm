@@ -60,6 +60,10 @@ else
 fi
 warn() { echo "WARNING:" "$@" >&2; }
 fail() { echo "ERROR:" "$@" >&2; exit 1; }
+fail_invalid() { [ $# -eq 2 ] \
+    && fail "Invalid value '$2' for option $1" \
+    || fail "Invalid value '$2' for option $1 ($3)"; }
+fail_mismatch() { fail "Option mismatch, $1 can't be used together with $2"; }
 
 kali_message() {
     local line=
@@ -222,7 +226,7 @@ echo "$@" | grep -q -e "--scratchsize[= ]" \
 
 # Validate the variant.
 echo $SUPPORTED_VARIANTS | grep -qw $VARIANT \
-    || fail "Unsupported variant '$VARIANT'"
+    || fail_invalid -v $VARIANT
 
 # If format was not set, choose a sensible default according to the variant.
 # Moreover, there should be no format when building a rootfs.
@@ -233,29 +237,29 @@ if [ $VARIANT != rootfs ]; then
             (qemu)       FORMAT=qemu ;;
             (virtualbox) FORMAT=virtualbox ;;
             (vmware)     FORMAT=vmware ;;
-            (*) fail "Unsupported variant '$VARIANT'" ;;
+            (*) fail_invalid -v $VARIANT ;;
         esac
     fi
     echo $SUPPORTED_FORMATS | grep -qw $FORMAT \
-        || fail "Unsupported format '$FORMAT'"
+        || fail_invalid -f $FORMAT
 else
-    [ -z "$FORMAT" ] || fail "Option -f can't be used to build a rootfs"
+    [ -z "$FORMAT" ] || fail_mismatch -f "'-v rootfs'"
 fi
 
 # When building an image from an existing rootfs, ARCH and VERSION are picked
 # from the rootfs name. Moreover, many options don't apply, as they've been
 # set already at the time the rootfs was built.
 if [ "$ROOTFS" ]; then
-    [ "$ARCH"     ] && fail "Option -a can't be used together with option -r"
-    [ "$BRANCH"   ] && fail "Option -b can't be used together with option -r"
-    [ "$DESKTOP"  ] && fail "Option -D can't be used together with option -r"
-    [ "$LOCALE"   ] && fail "Option -L can't be used together with option -r"
-    [ "$MIRROR"   ] && fail "Option -m can't be used together with option -r"
-    [ "$TIMEZONE" ] && fail "Option -Z can't be used together with option -r"
-    [ "$TOOLSET"  ] && fail "Option -T can't be used together with option -r"
-    [ "$USERPASS" ] && fail "Option -U can't be used together with option -r"
-    [ "$VERSION"  ] && fail "Option -x can't be used together with option -r"
-    [ $VARIANT != rootfs ] || fail "Option -r can only be used to build images"
+    [ "$ARCH"     ] && fail_mismatch -a -r
+    [ "$BRANCH"   ] && fail_mismatch -b -r
+    [ "$DESKTOP"  ] && fail_mismatch -D -r
+    [ "$LOCALE"   ] && fail_mismatch -L -r
+    [ "$MIRROR"   ] && fail_mismatch -m -r
+    [ "$TIMEZONE" ] && fail_mismatch -Z -r
+    [ "$TOOLSET"  ] && fail_mismatch -T -r
+    [ "$USERPASS" ] && fail_mismatch -U -r
+    [ "$VERSION"  ] && fail_mismatch -x -r
+    [ $VARIANT != rootfs ] || fail_mismatch -r "'-v rootfs'"
     [ "$(dirname $ROOTFS)" = "$OUTDIR" ] || fail "Rootfs must be within '$OUTDIR'"
     ROOTFS=$(basename $ROOTFS)
     ARCH=$(echo $ROOTFS | sed "s/\.tar\.gz$//" | rev | cut -d- -f1 | rev)
@@ -275,14 +279,14 @@ else
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
     # Validate some options
     echo $SUPPORTED_BRANCHES | grep -qw $BRANCH \
-        || fail "Unsupported branch '$BRANCH'"
+        || fail_invalid -b $BRANCH
     echo $SUPPORTED_DESKTOPS | grep -qw $DESKTOP \
-        || fail "Unsupported desktop '$DESKTOP'"
+        || fail_invalid -D $DESKTOP
     echo $SUPPORTED_TOOLSETS | grep -qw $TOOLSET \
-        || fail "Unsupported toolset '$TOOLSET'"
+        || fail_invalid -T $TOOLSET
     # Unpack USERPASS to USERNAME and PASSWORD
     echo $USERPASS | grep -q ":" \
-        || fail "Invalid value for -U, must be of the form '<username>:<password>'"
+        || fail_invalid -U $USERPASS "must be of the form <username>:<password>"
     USERNAME=$(echo $USERPASS | cut -d: -f1)
     PASSWORD=$(echo $USERPASS | cut -d: -f2-)
 fi
@@ -290,11 +294,11 @@ unset USERPASS
 
 # Validate architecture
 echo $SUPPORTED_ARCHITECTURES | grep -qw $ARCH \
-    || fail "Unsupported architecture '$ARCH'"
+    || fail_invalid -a $ARCH
 
 # Validate size and add the "GB" suffix
 [[ $SIZE =~ ^[0-9]+$ ]] && SIZE=${SIZE}GB \
-    || fail "Size must be given in GB and must contain only digits"
+    || fail_invalid -s $SIZE "must contain only digits"
 
 # Order packages alphabetically, separate each package with ", "
 PACKAGES=$(echo $PACKAGES | sed "s/[, ]\+/\n/g" | LC_ALL=C sort -u \
