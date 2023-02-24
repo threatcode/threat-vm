@@ -246,30 +246,30 @@ fi
 # from the rootfs name. Moreover, many options don't apply, as they've been
 # set already at the time the rootfs was built.
 if [ "$ROOTFS" ]; then
+    [ "$ARCH"     ] && fail "Option -a can't be used together with option -r"
+    [ "$BRANCH"   ] && fail "Option -b can't be used together with option -r"
+    [ "$DESKTOP"  ] && fail "Option -D can't be used together with option -r"
+    [ "$LOCALE"   ] && fail "Option -L can't be used together with option -r"
+    [ "$MIRROR"   ] && fail "Option -m can't be used together with option -r"
+    [ "$TIMEZONE" ] && fail "Option -Z can't be used together with option -r"
+    [ "$TOOLSET"  ] && fail "Option -T can't be used together with option -r"
+    [ "$USERPASS" ] && fail "Option -U can't be used together with option -r"
+    [ "$VERSION"  ] && fail "Option -x can't be used together with option -r"
     [ $VARIANT != rootfs ] || fail "Option -r can only be used to build images"
-    [ -z "$ARCH"    ] || fail "Option -a can't be used together with option -r"
-    [ -z "$BRANCH"  ] || fail "Option -b can't be used together with option -r"
-    [ -z "$DESKTOP" ] || fail "Option -D can't be used together with option -r"
-    [ -z "$LOCALE"  ] || fail "Option -L can't be used together with option -r"
-    [ -z "$MIRROR"  ] || fail "Option -m can't be used together with option -r"
-    [ -z "$TIMEZONE" ] || fail "Option -Z can't be used together with option -r"
-    [ -z "$TOOLSET"  ] || fail "Option -T can't be used together with option -r"
-    [ -z "$USERPASS" ] || fail "Option -U can't be used together with option -r"
-    [ -z "$VERSION" ] || fail "Option -x can't be used together with option -r"
     [ "$(dirname $ROOTFS)" = "$OUTDIR" ] || fail "Rootfs must be within '$OUTDIR'"
     ROOTFS=$(basename $ROOTFS)
     ARCH=$(echo $ROOTFS | sed "s/\.tar\.gz$//" | rev | cut -d- -f1 | rev)
     VERSION=$(echo $ROOTFS | sed -E "s/^rootfs-(.*)-$ARCH\.tar\.gz$/\1/")
 else
-    [ "$ARCH"    ] || ARCH=$DEFAULT_ARCH
-    [ "$BRANCH"  ] || BRANCH=$DEFAULT_BRANCH
-    [ "$DESKTOP" ] || DESKTOP=$DEFAULT_DESKTOP
-    [ "$LOCALE"  ] || LOCALE=$DEFAULT_LOCALE
-    [ "$MIRROR"  ] || MIRROR=$DEFAULT_MIRROR
+    [ "$ARCH"     ] || ARCH=$DEFAULT_ARCH
+    [ "$BRANCH"   ] || BRANCH=$DEFAULT_BRANCH
+    [ "$DESKTOP"  ] || DESKTOP=$DEFAULT_DESKTOP
+    [ "$LOCALE"   ] || LOCALE=$DEFAULT_LOCALE
+    [ "$MIRROR"   ] || MIRROR=$DEFAULT_MIRROR
     [ "$TIMEZONE" ] || TIMEZONE=$DEFAULT_TIMEZONE
     [ "$TOOLSET"  ] || TOOLSET=$(default_toolset)
     [ "$USERPASS" ] || USERPASS=$DEFAULT_USERPASS
-    [ "$VERSION" ] || VERSION=$(default_version)
+    [ "$VERSION"  ] || VERSION=$(default_version)
     # Set locale and timezone
     [ "$LOCALE" = same ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
