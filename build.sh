@@ -65,6 +65,15 @@ fail_invalid() { [ $# -eq 2 ] \
     || fail "Invalid value '$2' for option $1 ($3)"; }
 fail_mismatch() { fail "Option mismatch, $1 can't be used together with $2"; }
 
+in_list() {
+    local word=$1 && shift
+    local item=
+    for item in "$@"; do
+        [ "$item" = "$word" ] && return 0
+    done
+    return 1
+}
+
 kali_message() {
     local line=
     echo "┏━━($(b $@))"
@@ -225,8 +234,7 @@ echo "$@" | grep -q -e "--scratchsize[= ]" \
     || set -- "$@" --scratchsize=45G
 
 # Validate the variant.
-echo $SUPPORTED_VARIANTS | grep -qw $VARIANT \
-    || fail_invalid -v $VARIANT
+in_list $VARIANT $SUPPORTED_VARIANTS || fail_invalid -v $VARIANT
 
 # If format was not set, choose a sensible default according to the variant.
 # Moreover, there should be no format when building a rootfs.
@@ -240,8 +248,7 @@ if [ $VARIANT != rootfs ]; then
             (*) fail_invalid -v $VARIANT ;;
         esac
     fi
-    echo $SUPPORTED_FORMATS | grep -qw $FORMAT \
-        || fail_invalid -f $FORMAT
+    in_list $FORMAT $SUPPORTED_FORMATS || fail_invalid -f $FORMAT
 else
     [ -z "$FORMAT" ] || fail_mismatch -f "'-v rootfs'"
 fi
@@ -278,12 +285,9 @@ else
     [ "$LOCALE" = same ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
     # Validate some options
-    echo $SUPPORTED_BRANCHES | grep -qw $BRANCH \
-        || fail_invalid -b $BRANCH
-    echo $SUPPORTED_DESKTOPS | grep -qw $DESKTOP \
-        || fail_invalid -D $DESKTOP
-    echo $SUPPORTED_TOOLSETS | grep -qw $TOOLSET \
-        || fail_invalid -T $TOOLSET
+    in_list $BRANCH $SUPPORTED_BRANCHES || fail_invalid -b $BRANCH
+    in_list $DESKTOP $SUPPORTED_DESKTOPS || fail_invalid -D $DESKTOP
+    in_list $TOOLSET $SUPPORTED_TOOLSETS || fail_invalid -T $TOOLSET
     # Unpack USERPASS to USERNAME and PASSWORD
     echo $USERPASS | grep -q ":" \
         || fail_invalid -U $USERPASS "must be of the form <username>:<password>"
@@ -293,8 +297,7 @@ fi
 unset USERPASS
 
 # Validate architecture
-echo $SUPPORTED_ARCHITECTURES | grep -qw $ARCH \
-    || fail_invalid -a $ARCH
+in_list $ARCH $SUPPORTED_ARCHITECTURES || fail_invalid -a $ARCH
 
 # Validate size and add the "GB" suffix
 [[ $SIZE =~ ^[0-9]+$ ]] && SIZE=${SIZE}GB \
