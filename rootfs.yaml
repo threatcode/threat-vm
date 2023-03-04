@@ -1,17 +1,16 @@
-{{ $arch := .arch }}
-{{ $branch := .branch }}
-{{ $mirror := .mirror }}
-{{ $rootfs := .rootfs }}
+{{- $arch := .arch }}
+{{- $branch := .branch }}
+{{- $mirror := .mirror }}
 
-{{ $desktop := .desktop }}
-{{ $locale := .locale }}
-{{ $password := .password }}
-{{ $packages := .packages }}
-{{ $timezone := .timezone }}
-{{ $toolset := .toolset }}
-{{ $username := .username }}
+{{- $desktop := .desktop }}
+{{- $locale := .locale }}
+{{- $password := .password }}
+{{- $packages := .packages }}
+{{- $timezone := .timezone }}
+{{- $toolset := .toolset }}
+{{- $username := .username }}
 
-{{ $hostname := or .hostname "kali" }}
+{{- $hostname := or .hostname "kali" }}
 
 architecture: {{ $arch }}
 
@@ -98,11 +97,4 @@ actions:
     chroot: false
     script: scripts/cleanup-out.sh
 
-  - description: "Pack {{ $rootfs }}"
-    action: pack
-    file: {{ $rootfs }}.tar.gz
 
-  - description: "List build artifacts"
-    action: run
-    postprocess: true
-    command: echo {{ $rootfs }}.tar.gz > $ARTIFACTDIR/.artifacts
