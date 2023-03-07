@@ -2,6 +2,7 @@
 
 set -eu
 
+CONTAINER=${CONTAINER:-}
 IMAGE=kali-rolling/vm-builder
 OPTS=()
 
@@ -17,6 +18,16 @@ fail() { echo "ERROR:" "$@" >&2; exit 1; }
 vrun() { echo $(b "$ $@"); "$@"; }
 vexec() { echo $(b "$ $@"); exec "$@"; }
 
+if [ -z "$CONTAINER" ]; then
+    if [ -x /usr/bin/podman ]; then
+        CONTAINER=podman
+    elif [ -x /usr/bin/docker ]; then
+        CONTAINER=docker
+    else
+        fail "No container engine detected, aborting."
+    fi
+fi
+
 if [ -t 0 ]; then
     OPTS+=(--interactive --tty)
 fi
@@ -27,22 +38,21 @@ OPTS+=(
     --volume $(pwd):/recipes --workdir /recipes
 )
 
-if [ -x /usr/bin/podman ]; then
-    PODMAN=podman
-    if [ $(id -u) -eq 0 ]; then
+case $CONTAINER in
+    docker)
         OPTS+=(--user $(stat -c "%u:%g" .))
-    fi
-    OPTS+=(--log-driver none)    # we don't want stdout in the journal
-elif [ -x /usr/bin/docker ]; then
-    PODMAN=docker
-    OPTS+=(--user $(stat -c "%u:%g" .))
-else
-    fail "No container engine detected, aborting."
-fi
+        ;;
+    podman)
+        if [ $(id -u) -eq 0 ]; then
+            OPTS+=(--user $(stat -c "%u:%g" .))
+        fi
+        OPTS+=(--log-driver none)    # we don't want stdout in the journal
+        ;;
+esac
 
-if ! $PODMAN inspect --type image $IMAGE >/dev/null 2>&1; then
-    vrun $PODMAN build -t $IMAGE .
+if ! $CONTAINER inspect --type image $IMAGE >/dev/null 2>&1; then
+    vrun $CONTAINER build -t $IMAGE .
     echo
 fi
 
-vexec $PODMAN run "${OPTS[@]}" $IMAGE ./build.sh "$@"
+vexec $CONTAINER run "${OPTS[@]}" $IMAGE ./build.sh "$@"
