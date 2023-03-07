@@ -143,7 +143,8 @@ ask_confirmation() {
     esac
 }
 
-if [ $(id -u) -eq 0 ]; then
+# No need to be root, but the message doesn't make much sense in containers
+if [ $(id -u) -eq 0 ] && [ ! -e /run/.containerenv ] && [ ! -e /.dockerenv ]; then
     warn "This script does not require root privileges."
     warn "Please consider running it as a non-root user."
 fi
