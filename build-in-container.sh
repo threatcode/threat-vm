@@ -3,8 +3,20 @@
 set -eu
 
 IMAGE=kali-rolling/vm-builder
-
 OPTS=()
+
+# Use escape sequences only if both stdout/stderr are opened on a terminal
+if [ -t 1 ] && [ -t 2 ]; then
+    _bold=$(tput bold) _reset=$(tput sgr0)
+else
+    _bold= _reset=
+fi
+
+b() { echo -n "${_bold}$@${_reset}"; }
+fail() { echo "ERROR:" "$@" >&2; exit 1; }
+vrun() { echo $(b "$ $@"); "$@"; }
+vexec() { echo $(b "$ $@"); exec "$@"; }
+
 if [ -t 0 ]; then
     OPTS+=(--interactive --tty)
 fi
@@ -25,18 +37,8 @@ elif [ -x /usr/bin/docker ]; then
     PODMAN=docker
     OPTS+=(--user $(stat -c "%u:%g" .))
 else
-    echo "ERROR: No container engine detected, aborting." >&2
-    exit 1
+    fail "No container engine detected, aborting."
 fi
-
-# Output bold only if both stdout/stderr are opened on a terminal
-if [ -t 1 -a -t 2 ]; then
-    bold() { tput bold; echo "$@"; tput sgr0; }
-else
-    bold() { echo "$@"; }
-fi
-vrun() { bold "$" "$@"; "$@"; }
-vexec() { bold "$" "$@"; exec "$@"; }
 
 if ! $PODMAN inspect --type image $IMAGE >/dev/null 2>&1; then
     vrun $PODMAN build -t $IMAGE .
