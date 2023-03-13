@@ -366,6 +366,7 @@ fi
 ask_confirmation || { echo "Abort."; exit 1; }
 
 mkdir -p $OUTDIR
+rm -f $OUTDIR/.artifacts
 
 if [ $VARIANT = rootfs ]; then
     ROOTFS=rootfs-$VERSION-$ARCH
