@@ -49,7 +49,6 @@ actions:
       imagename: {{ $imagename }}
       imagesize: {{ $imagesize }}
       keep: {{ $keep }}
-      rootfs: {{ $rootfs }}
       variant: {{ $variant }}
       zip: {{ $zip }}
 {{ else }}
