@@ -38,6 +38,7 @@ ROOTFS=
 SIZE=86
 TIMEZONE=
 TOOLSET=
+UEFI=
 USERNAME=
 USERPASS=
 VARIANT=generic
@@ -394,6 +395,7 @@ debos "$@" \
     -t rootfs:$ROOTFS \
     -t timezone:$TIMEZONE \
     -t toolset:$TOOLSET \
+    -t uefi:$UEFI \
     -t username:$USERNAME \
     -t variant:$VARIANT \
     -t zip:$ZIP \

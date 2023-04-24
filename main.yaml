@@ -6,6 +6,7 @@
 {{- $keep := .keep }}
 {{- $mirror := .mirror }}
 {{- $rootfs := .rootfs }}
+{{- $uefi := .uefi }}
 {{- $variant := .variant }}
 {{- $zip := .zip }}
 
@@ -49,6 +50,7 @@ actions:
       imagename: {{ $imagename }}
       imagesize: {{ $imagesize }}
       keep: {{ $keep }}
+      uefi: {{ $uefi }}
       variant: {{ $variant }}
       zip: {{ $zip }}
 {{ else }}
