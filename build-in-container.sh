@@ -12,9 +12,11 @@ OPTS=()
 
 # Use escape sequences only if both stdout/stderr are opened on a terminal
 if [ -t 1 ] && [ -t 2 ]; then
-    _bold=$(tput bold) _reset=$(tput sgr0)
+    _bold=$(tput bold)
+    _reset=$(tput sgr0)
 else
-    _bold= _reset=
+    _bold=
+    _reset=
 fi
 
 b() { echo -n "${_bold}$@${_reset}"; }
