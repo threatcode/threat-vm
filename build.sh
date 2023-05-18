@@ -23,6 +23,7 @@ DEFAULT_MIRROR=http://http.kali.org/kali
 DEFAULT_TIMEZONE=US/Eastern
 DEFAULT_TOOLSET=default
 DEFAULT_USERPASS=kali:kali
+DEFAULT_VARIANT=generic
 
 ARCH=
 BRANCH=
@@ -40,7 +41,7 @@ TIMEZONE=
 TOOLSET=
 USERNAME=
 USERPASS=
-VARIANT=generic
+VARIANT=
 VERSION=
 ZIP=false
 
@@ -164,7 +165,7 @@ Build options:
   -m MIRROR   Mirror used to build the image, default: $(b $DEFAULT_MIRROR)
   -r ROOTFS   Rootfs to use to build the image, default: $(b none)
   -s SIZE     Size of the disk image in GB, default: $(b $SIZE)
-  -v VARIANT  Variant of image to build (see below for details), default: $(b $VARIANT)
+  -v VARIANT  Variant of image to build (see below for details), default: $(b $DEFAULT_VARIANT)
               Supported values: $SUPPORTED_VARIANTS
   -z          Zip images and metadata files after the build
 
@@ -290,6 +291,7 @@ else
     [ "$TIMEZONE" ] || TIMEZONE=$DEFAULT_TIMEZONE
     [ "$TOOLSET"  ] || TOOLSET=$(default_toolset)
     [ "$USERPASS" ] || USERPASS=$DEFAULT_USERPASS
+    [ "$VARIANT"  ] || VARIANT=$DEFAULT_VARIANT
     [ "$VERSION"  ] || VERSION=$(default_version)
     # Set locale and timezone
     [ "$LOCALE" = same ] && LOCALE=$(get_locale)
