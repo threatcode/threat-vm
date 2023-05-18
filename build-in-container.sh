@@ -18,7 +18,6 @@ else
     _bold=
     _reset=
 fi
-
 b() { echo -n "${_bold}$@${_reset}"; }
 fail() { echo "ERROR: $@" 1>&2; exit 1; }
 # Last program in this script should use exec
