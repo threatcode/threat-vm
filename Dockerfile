@@ -1,3 +1,4 @@
+## REF: https://hub.docker.com/r/kalilinux/kali-rolling
 FROM docker.io/kalilinux/kali-rolling
 
 RUN apt-get update \
