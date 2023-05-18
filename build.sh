@@ -2,7 +2,7 @@
 
 set -eu
 
-WELL_KNOWN_CACHING_PROXIES="\
+KNOWN_CACHING_PROXIES="\
 3142 apt-cacher-ng
 8000 squid-deb-proxy"
 DETECTED_CACHING_PROXY=
@@ -325,7 +325,7 @@ if ! [ -v http_proxy ]; then
         DETECTED_CACHING_PROXY="$port $proxy"
         export http_proxy="http://10.0.2.2:$port"
         break
-    done <<< "$WELL_KNOWN_CACHING_PROXIES"
+    done <<< "$KNOWN_CACHING_PROXIES"
 fi
 
 # Print a summary
