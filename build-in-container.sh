@@ -25,14 +25,17 @@ fail() { echo "ERROR: $@" 1>&2; exit 1; }
 vexec() { b "# $@"; echo; exec "$@"; }
 vrun()  { b "# $@"; echo;      "$@"; }
 
-if [ -z "$CONTAINER" ]; then
-    if [ -x /usr/bin/podman ]; then
-        CONTAINER=podman
-    elif [ -x /usr/bin/docker ]; then
-        CONTAINER=docker
-    else
-        fail "No container engine detected, aborting."
-    fi
+if [ -x "$(which podman)" ] && \
+  ([ -z $CONTAINER ] || [ $CONTAINER == "podman" ]); then
+    CONTAINER=podman
+
+    # We don't want stdout in the journal
+    OPTS+=(--log-driver none)
+elif [ -x "$(which docker)" ] && \
+    ([ -z $CONTAINER ] || [ $CONTAINER == "docker" ]); then
+    CONTAINER=docker
+else
+    fail "No container engine detected, aborting"
 fi
 
 if [ -t 0 ]; then
@@ -45,17 +48,11 @@ OPTS+=(
     --volume $(pwd):/recipes --workdir /recipes
 )
 
-case $CONTAINER in
-    docker)
-        OPTS+=(--user $(stat -c "%u:%g" .))
-        ;;
-    podman)
-        if [ $(id -u) -eq 0 ]; then
-            OPTS+=(--user $(stat -c "%u:%g" .))
-        fi
-        OPTS+=(--log-driver none)    # we don't want stdout in the journal
-        ;;
-esac
+
+# Check root privileges
+# Stop fakemachine warning (does not want to be root)
+[ "$(id -u)" -eq 0 ] \
+    && OPTS+=(--user "$(stat --format="%u:%g" .)")
 
 if ! $CONTAINER inspect --type image $IMAGE >/dev/null 2>&1; then
     vrun $CONTAINER build -t $IMAGE .
