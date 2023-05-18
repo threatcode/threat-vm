@@ -438,10 +438,12 @@ echo "# Build options:"
 [ "$LOCALE"   ] && point "locale: $(b $LOCALE)"
 [ "$TIMEZONE" ] && point "timezone: $(b $TIMEZONE)"
 [ "$KEEP"     ] && point "keep temporary files: $(b $KEEP)"
-} | kali_message "Kali Linux VM Build"
+} \
+    | kali_message "Kali Linux VM Build"
 
 # Ask for confirmation before starting the build
-ask_confirmation || { echo "Abort."; exit 1; }
+ask_confirmation \
+    || { echo "Abort"; exit 1; }
 
 create_vm "$@"
 
