@@ -67,6 +67,7 @@ fi
 b() { echo -n "${_bold}$@${_reset}"; }
 fail() { echo "ERROR: $@"   1>&2; exit 1; }
 warn() { echo "WARNING: $@" 1>&2; }
+point() { echo " * $@"; }
 
 fail_invalid() {
     local msg="Invalid value '$2' for option $1"
@@ -359,30 +360,32 @@ if [ "$DETECTED_CACHING_PROXY" ]; then
     echo "Detected caching proxy $(b $proxy) on port $(b $port)."
 fi
 if [ "${http_proxy:-}" ]; then
-    echo "Using proxy via environment variable: $(b http_proxy=$http_proxy)."
+    point "Using proxy via environment variable: $(b http_proxy=$http_proxy)"
 else
-    echo "No http proxy configured, all packages will be downloaded from Internet."
+    point "No http proxy configured, all packages will be downloaded from Internet"
 fi
 
 echo "# Build options:"
 if [ $VARIANT = rootfs ]; then
-    echo "Build a Kali Linux $(b $VARIANT) for the $(b $ARCH) architecture."
+    point "Build a Kali Linux $(b $VARIANT) for the $(b $ARCH) architecture"
 else
     if [ "$ROOTFS" ]; then
-        echo "Build a Kali Linux $(b $VARIANT) image based on $(b $ROOTFS)."
+        point "Build a Kali Linux $(b $VARIANT) image based on $(b $ROOTFS)"
     else
-        echo "Build a Kali Linux $(b $VARIANT) image for the $(b $ARCH) architecture."
+        point "Build a Kali Linux $(b $VARIANT) image for the $(b $ARCH) architecture"
     fi
-    echo "Export the image to the $(b $FORMAT) format. Disk size: $(b $SIZE)."
+    point "Export the image to the $(b $FORMAT) format. Disk size: $(b $SIZE)"
 fi
-[ "$MIRROR"   ] && echo "* mirror: $(b $MIRROR)"
-[ "$BRANCH"   ] && echo "* branch: $(b $BRANCH)"
-[ "$DESKTOP"  ] && echo "* desktop environment: $(b $DESKTOP)"
-[ "$TOOLSET"  ] && echo "* tool selection: $(b $TOOLSET)"
-[ "$PACKAGES" ] && echo "* additional packages: $(b $PACKAGES)"
-[ "$USERNAME" ] && echo "* username & password: $(b $USERNAME $PASSWORD)"
-[ "$LOCALE"   ] && echo "* locale: $(b $LOCALE)"
-[ "$TIMEZONE" ] && echo "* timezone: $(b $TIMEZONE)"
+[ "$MIRROR"   ] && point "mirror: $(b $MIRROR)"
+[ "$BRANCH"   ] && point "branch: $(b $BRANCH)"
+[ "$VERSION"  ] && point "version: $(b $VERSION)"
+[ "$DESKTOP"  ] && point "desktop environment: $(b $DESKTOP)"
+[ "$TOOLSET"  ] && point "tool selection: $(b $TOOLSET)"
+[ "$PACKAGES" ] && point "additional packages: $(b $PACKAGES)"
+[ "$USERNAME" ] && point "username & password: $(b $USERNAME $PASSWORD)"
+[ "$LOCALE"   ] && point "locale: $(b $LOCALE)"
+[ "$TIMEZONE" ] && point "timezone: $(b $TIMEZONE)"
+[ "$KEEP"     ] && point "keep temporary files: $(b $KEEP)"
 } | kali_message "Kali Linux VM Build"
 
 # Ask for confirmation before starting the build
