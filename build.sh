@@ -11,7 +11,6 @@ SUPPORTED_ARCHITECTURES="amd64 i386"
 SUPPORTED_BRANCHES="kali-dev kali-last-snapshot kali-rolling"
 SUPPORTED_DESKTOPS="e17 gnome i3 kde lxde mate xfce none"
 SUPPORTED_TOOLSETS="default everything headless large none"
-
 SUPPORTED_FORMATS="ova ovf raw qemu virtualbox vmware"
 SUPPORTED_VARIANTS="generic qemu rootfs virtualbox vmware"
 
@@ -58,7 +57,6 @@ if [ -t 1 ] && [ -t 2 ]; then
 else
     _bold= _reset=
 fi
-
 b() { echo -n "${_bold}$@${_reset}"; }
 warn() { echo "WARNING:" "$@" >&2; }
 fail() { echo "ERROR:" "$@" >&2; exit 1; }
@@ -423,7 +421,6 @@ cat << EOF
                                             c
                                             .'
                                              .
-
 Successful build! The following build artifacts were produced:
 EOF
 cat $OUTDIR/.artifacts | sed "s:^:* $OUTDIR/:"
