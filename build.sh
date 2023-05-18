@@ -375,9 +375,6 @@ PACKAGES=$(echo $PACKAGES \
               | awk 'ORS=", "' \
               | sed "s/[, ]*$//")
 
-# Attempt to detect well-known http caching proxies on localhost,
-# cf. bash(1) section "REDIRECTION". This is not bullet-proof.
-if ! [ -v http_proxy ]; then
 # Validate some options
 in_list $VARIANT $SUPPORTED_VARIANTS \
     || fail_invalid -v $VARIANT
@@ -399,6 +396,10 @@ in_list $ARCH $SUPPORTED_ARCHITECTURES \
     && SIZE=${SIZE}GB \
     || fail_invalid -s $SIZE "must contain only digits"
 
+# [ -v ... ] isn't supported on all every bash version
+if ! [ $(env | grep http_proxy) ]; then
+    # Attempt to detect well-known http caching proxies on localhost,
+    # cf. bash(1) section "REDIRECTION". This is not bullet-proof
     while read port proxy; do
         (</dev/tcp/localhost/$port) 2>/dev/null \
             || continue
