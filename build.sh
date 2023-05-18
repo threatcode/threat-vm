@@ -170,9 +170,11 @@ if [ $(id -u) -eq 0 ] && [ ! -e /run/.containerenv ] && [ ! -e /.dockerenv ]; th
     warn "Please consider running it as a non-root user."
 fi
 
-USAGE="Usage: $(basename $0) [<option>...] [-- <debos option>...]
 
-Build a Kali Linux OS image.
+
+USAGE="Usage: $(basename $0) <options> [-- <debos options>]
+
+Build a Kali Linux VM image
 
 Build options:
   -a ARCH     Build an image for this architecture, default: $(b $DEFAULT_ARCH)
