@@ -169,7 +169,44 @@ if [ $(id -u) -eq 0 ] && [ ! -e /run/.containerenv ] && [ ! -e /.dockerenv ]; th
     warn "This script does not require root privileges."
     warn "Please consider running it as a non-root user."
 fi
+create_vm() {
+    mkdir -pv "$OUTDIR/"
+    rm -fv "$OUTDIR/.artifacts"
 
+    # Filename structure for final file
+    OUTPUT=kali-linux-$VERSION-$VARIANT-$ARCH
+
+    if [ $VARIANT = rootfs ]; then
+        ROOTFS=$OUTPUT
+        IMAGENAME=
+    elif [ "$ROOTFS" ]; then
+        ROOTFS=${ROOTFS%.tar.*}
+        IMAGENAME=$OUTPUT
+    else
+        ROOTFS=
+        IMAGENAME=$OUTPUT
+    fi
+
+    debos "$@" \
+        -t arch:$ARCH \
+        -t branch:$BRANCH \
+        -t desktop:$DESKTOP \
+        -t format:$FORMAT \
+        -t imagename:$IMAGENAME \
+        -t imagesize:$SIZE \
+        -t keep:$KEEP \
+        -t locale:$LOCALE \
+        -t mirror:$MIRROR \
+        -t packages:"$PACKAGES" \
+        -t password:"$PASSWORD" \
+        -t rootfs:$ROOTFS \
+        -t timezone:$TIMEZONE \
+        -t toolset:$TOOLSET \
+        -t username:$USERNAME \
+        -t variant:$VARIANT \
+        -t zip:$ZIP \
+        main.yaml
+}
 
 
 USAGE="Usage: $(basename $0) <options> [-- <debos options>]
@@ -405,39 +442,7 @@ fi
 # Ask for confirmation before starting the build
 ask_confirmation || { echo "Abort."; exit 1; }
 
-mkdir -p $OUTDIR
-rm -f $OUTDIR/.artifacts
-
-if [ $VARIANT = rootfs ]; then
-    ROOTFS=rootfs-$VERSION-$ARCH
-    IMAGENAME=
-elif [ "$ROOTFS" ]; then
-    ROOTFS=${ROOTFS%.tar.*}
-    IMAGENAME=kali-linux-$VERSION-$VARIANT-$ARCH
-else
-    ROOTFS=
-    IMAGENAME=kali-linux-$VERSION-$VARIANT-$ARCH
-fi
-
-debos "$@" \
-    -t arch:$ARCH \
-    -t branch:$BRANCH \
-    -t desktop:$DESKTOP \
-    -t format:$FORMAT \
-    -t imagename:$IMAGENAME \
-    -t imagesize:$SIZE \
-    -t keep:$KEEP \
-    -t locale:$LOCALE \
-    -t mirror:$MIRROR \
-    -t packages:"$PACKAGES" \
-    -t password:"$PASSWORD" \
-    -t rootfs:$ROOTFS \
-    -t timezone:$TIMEZONE \
-    -t toolset:$TOOLSET \
-    -t username:$USERNAME \
-    -t variant:$VARIANT \
-    -t zip:$ZIP \
-    main.yaml
+create_vm "$@"
 
 cat << EOF
 ..............
