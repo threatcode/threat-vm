@@ -246,7 +246,7 @@ while getopts ":a:b:D:f:hkL:m:P:r:s:T:U:v:x:zZ:" opt; do
         (x) VERSION=$OPTARG ;;
         (z) ZIP=true ;;
         (Z) TIMEZONE=$OPTARG ;;
-        (*) echo "$USAGE" >&2; exit 1 ;;
+        (*) echo "$USAGE" 1>&2; exit 1 ;;
     esac
 done
 shift $((OPTIND - 1))
