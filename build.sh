@@ -44,15 +44,20 @@ VARIANT=
 VERSION=
 ZIP=false
 
-default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] && echo headless || echo $DEFAULT_TOOLSET; }
+default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] \
+    && echo headless \
+    || echo $DEFAULT_TOOLSET; }
 default_version() { echo ${BRANCH:-$DEFAULT_BRANCH} | sed "s/^kali-//"; }
-get_locale() { [ -v $LANG ] && echo $LANG || echo $DEFAULT_LOCALE; }
+get_locale() { [ -v $LANG ] \
+    && echo $LANG \
+    || echo $DEFAULT_LOCALE; }
 get_timezone() { [ -h /etc/localtime ] \
     && realpath --relative-to /usr/share/zoneinfo /etc/localtime \
     || echo $DEFAULT_TIMEZONE; }
 
 # Use escape sequences only if both stdout/stderr are opened on a terminal
-if [ -t 1 ] && [ -t 2 ]; then
+if [ -t 1 ] && \
+   [ -t 2 ]; then
     _bold=$(tput bold)
     _reset=$(tput sgr0)
 else
@@ -66,22 +71,26 @@ fail() { echo "ERROR:" "$@" >&2; exit 1; }
 fail_invalid() {
     local msg="Invalid value '$2' for option $1"
     shift 2;
-    [ $# -gt 0 ] && msg="$msg ($@)"
+    [ $# -gt 0 ] \
+        && msg="$msg ($@)"
     fail "$msg"
 }
 
 fail_mismatch() {
     local msg="Option mismatch, $1 can't be used together with $2"
     shift 2;
-    [ $# -gt 0 ] && msg="$msg ($@)"
+    [ $# -gt 0 ] \
+        && msg="$msg ($@)"
     fail "$msg"
 }
 
 in_list() {
-    local word=$1 && shift
+    local word=$1 \
+        && shift
     local item=
     for item in "$@"; do
-        [ "$item" = "$word" ] && return 0
+        [ "$item" = "$word" ] \
+            && return 0
     done
     return 1
 }
@@ -107,7 +116,8 @@ ask_confirmation() {
     local ret=
 
     # If stdin is closed, no need to ask, assume yes
-    [ -t 0 ] || return 0
+    [ -t 0 ] \
+        || return 0
 
     # Set variables that depend on default
     if [ $default = yes ]; then
@@ -125,7 +135,8 @@ ask_confirmation() {
     grand_timeout=$((grand_timeout - timeout))
     for time_left in $(seq $grand_timeout -$timeout 0); do
         ret=0
-        read -r -t $timeout -p "$question $choices " answer || ret=$?
+        read -r -t $timeout -p "$question $choices " answer \
+          || ret=$?
         if [ $ret -gt 128 ]; then
             if [ $time_left -gt 0 ]; then
                 echo "$time_left seconds left before $default_verbing"
@@ -141,7 +152,9 @@ ask_confirmation() {
     done
 
     # Process the answer
-    [ "$answer" ] && answer=${answer,,} || answer=$default
+    [ "$answer" ] \
+        && answer=${answer,,} \
+        || answer=$default
     case "$answer" in
         (y|yes) return 0 ;;
         (*)     return 1 ;;
@@ -320,14 +333,18 @@ in_list $ARCH $SUPPORTED_ARCHITECTURES || fail_invalid -a $ARCH
     || fail_invalid -s $SIZE "must contain only digits"
 
 # Order packages alphabetically, separate each package with ", "
-PACKAGES=$(echo $PACKAGES | sed "s/[, ]\+/\n/g" | LC_ALL=C sort -u \
-    | awk 'ORS=", "' | sed "s/[, ]*$//")
+PACKAGES=$(echo $PACKAGES \
+              | sed "s/[, ]\+/\n/g" \
+              | LC_ALL=C sort -u \
+              | awk 'ORS=", "' \
+              | sed "s/[, ]*$//")
 
 # Attempt to detect well-known http caching proxies on localhost,
 # cf. bash(1) section "REDIRECTION". This is not bullet-proof.
 if ! [ -v http_proxy ]; then
     while read port proxy; do
-        (</dev/tcp/localhost/$port) 2>/dev/null || continue
+        (</dev/tcp/localhost/$port) 2>/dev/null \
+            || continue
         DETECTED_CACHING_PROXY="$port $proxy"
         export http_proxy="http://10.0.2.2:$port"
         break
