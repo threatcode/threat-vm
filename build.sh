@@ -53,9 +53,11 @@ get_timezone() { [ -h /etc/localtime ] \
 
 # Use escape sequences only if both stdout/stderr are opened on a terminal
 if [ -t 1 ] && [ -t 2 ]; then
-    _bold=$(tput bold) _reset=$(tput sgr0)
+    _bold=$(tput bold)
+    _reset=$(tput sgr0)
 else
-    _bold= _reset=
+    _bold=
+    _reset=
 fi
 b() { echo -n "${_bold}$@${_reset}"; }
 warn() { echo "WARNING:" "$@" >&2; }
@@ -63,13 +65,15 @@ fail() { echo "ERROR:" "$@" >&2; exit 1; }
 
 fail_invalid() {
     local msg="Invalid value '$2' for option $1"
-    shift 2; [ $# -gt 0 ] && msg="$msg ($@)"
+    shift 2;
+    [ $# -gt 0 ] && msg="$msg ($@)"
     fail "$msg"
 }
 
 fail_mismatch() {
     local msg="Option mismatch, $1 can't be used together with $2"
-    shift 2; [ $# -gt 0 ] && msg="$msg ($@)"
+    shift 2;
+    [ $# -gt 0 ] && msg="$msg ($@)"
     fail "$msg"
 }
 
@@ -85,7 +89,9 @@ in_list() {
 kali_message() {
     local line=
     echo "┏━━($(b $@))"
-    while IFS= read -r line; do echo "┃ $line"; done
+    while IFS= read -r line; do
+        echo "┃ $line";
+    done
     echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 
