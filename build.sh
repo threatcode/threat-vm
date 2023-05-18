@@ -162,6 +162,7 @@ ask_confirmation() {
         (y|yes) return 0 ;;
         (*)     return 1 ;;
     esac
+    echo ""
 }
 
 # create_vm
