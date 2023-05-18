@@ -45,7 +45,7 @@ VARIANT=
 VERSION=
 ZIP=false
 
-default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] && echo headless || echo default; }
+default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] && echo headless || echo $DEFAULT_TOOLSET; }
 default_version() { echo ${BRANCH:-$DEFAULT_BRANCH} | sed "s/^kali-//"; }
 get_locale() { [ -v $LANG ] && echo $LANG || echo $DEFAULT_LOCALE; }
 get_timezone() { [ -h /etc/localtime ] \
