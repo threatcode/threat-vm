@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# ./$0
+# CONTAINER=docker ./$0
+#
 
 set -eu
 

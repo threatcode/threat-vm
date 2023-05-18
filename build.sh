@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# ./$0
+# http_proxy= ./$0
+#
 
 set -eu
 
