@@ -187,6 +187,7 @@ Build options:
   -s SIZE     Size of the disk image in GB, default: $(b $SIZE)
   -v VARIANT  Variant of image to build (see below for details), default: $(b $DEFAULT_VARIANT)
               Supported values: $SUPPORTED_VARIANTS
+  -x VERSION  What to name the image release as, default: $(b $(default_version))
   -z          Zip images and metadata files after the build
 
 Customization options:
@@ -216,6 +217,12 @@ The different formats are:
 
 Supported environment variables:
   http_proxy  HTTP proxy URL, refer to the README.md for more details
+
+Debos options:
+  --artifactdir DIR   Set artifact directory, default: $(b $OUTDIR)
+  --memory      SIZE  Limit amount of memory to build VM in GB, default: $(b $MEMORY)
+  --scratchsize SIZE  Limit amount of HDD to build VM in GB, default: $(b $SCARTCHSIZE)
+  --debug-shell       Get a shell on the VM
 
 Refer to the README.md for examples
 "
