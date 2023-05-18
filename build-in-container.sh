@@ -20,9 +20,10 @@ else
 fi
 
 b() { echo -n "${_bold}$@${_reset}"; }
-fail() { echo "ERROR:" "$@" >&2; exit 1; }
-vrun() { echo $(b "$ $@"); "$@"; }
-vexec() { echo $(b "$ $@"); exec "$@"; }
+fail() { echo "ERROR: $@" 1>&2; exit 1; }
+# Last program in this script should use exec
+vexec() { b "# $@"; echo; exec "$@"; }
+vrun()  { b "# $@"; echo;      "$@"; }
 
 if [ -z "$CONTAINER" ]; then
     if [ -x /usr/bin/podman ]; then
