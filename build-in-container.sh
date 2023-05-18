@@ -48,6 +48,11 @@ OPTS+=(
     --volume $(pwd):/recipes --workdir /recipes
 )
 
+# Kernel-based Virtual Machine
+# Check if virtualization extensions is enabled (in BIOS/UEFI)
+[ -e /dev/kvm ] \
+    && OPTS+=(--device /dev/kvm --group-add "$(stat -c "%g" /dev/kvm)") \
+    || fail "Missing /dev/kvm, aborting"
 
 # Check root privileges
 # Stop fakemachine warning (does not want to be root)
