@@ -38,14 +38,28 @@ else
     fail "No container engine detected, aborting"
 fi
 
+# If stdin is an option, use tty
 if [ -t 0 ]; then
-    OPTS+=(--interactive --tty)
+    OPTS+=(
+        --interactive
+        --tty
+    )
 fi
+
 OPTS+=(
-    --rm --net host
-    --device /dev/kvm --group-add $(stat -c "%g" /dev/kvm)
+    --rm
+    --network host
+    --volume "$(pwd):/recipes" --workdir /recipes
+)
+
+# Permissions & security
+# - DAC_OVERRIDE ~ mkdir: created directory 'images/'
+OPTS+=(
+    --cap-add=DAC_OVERRIDE
+    --cap-drop=ALL
+
     --security-opt label=disable
-    --volume $(pwd):/recipes --workdir /recipes
+    --security-opt apparmor=unconfined
 )
 
 # Kernel-based Virtual Machine
