@@ -80,7 +80,7 @@ fail_invalid() {
 }
 
 fail_mismatch() {
-    local msg="Option mismatch, $1 can't be used together with $2"
+    local msg="Option mismatch, $1 cannot be used together with $2"
     shift 2;
     [ $# -gt 0 ] \
         && msg="$msg ($@)"
@@ -222,7 +222,7 @@ Build options:
               Supported values: $SUPPORTED_FORMATS
   -k          Keep raw disk image and other intermediary build artifacts
   -m MIRROR   Mirror used to build the image, default: $(b $DEFAULT_MIRROR)
-  -r ROOTFS   Rootfs to use to build the image, default: $(b none)
+  -r ROOTFS   rootfs to use to build the image, default: $(b none)
   -s SIZE     Size of the disk image in GB, default: $(b $SIZE)
   -v VARIANT  Variant of image to build (see below for details), default: $(b $DEFAULT_VARIANT)
               Supported values: $SUPPORTED_VARIANTS
@@ -326,7 +326,7 @@ if [ "$ROOTFS" ]; then
     [ "$USERPASS" ] && fail_mismatch -U -r
     [ "$VERSION"  ] && fail_mismatch -x -r
     [ $VARIANT != rootfs ] || fail_mismatch -r "'-v rootfs'"
-    [ "$(dirname $ROOTFS)" = "$OUTDIR" ] || fail "Rootfs must be within '$OUTDIR'"
+    [ "$(dirname $ROOTFS)" = "$OUTDIR" ] || fail "rootfs must be within: $OUTDIR"
     ROOTFS=$(basename $ROOTFS)
     ARCH=$(echo $ROOTFS | sed "s/\.tar\.gz$//" | rev | cut -d- -f1 | rev)
     VERSION=$(echo $ROOTFS | sed -E "s/^rootfs-(.*)-$ARCH\.tar\.gz$/\1/")
@@ -416,7 +416,7 @@ else
     point "No http proxy configured, all packages will be downloaded from Internet"
 fi
 
-echo "# Build options:"
+echo "# VM output:"
 if [ $VARIANT = rootfs ]; then
     point "Build a Kali Linux $(b $VARIANT) for the $(b $ARCH) architecture"
 else
@@ -427,6 +427,7 @@ else
     fi
     point "Export the image to the $(b $FORMAT) format. Disk size: $(b $SIZE)"
 fi
+echo "# Build options:"
 [ "$MIRROR"   ] && point "mirror: $(b $MIRROR)"
 [ "$BRANCH"   ] && point "branch: $(b $BRANCH)"
 [ "$VERSION"  ] && point "version: $(b $VERSION)"
