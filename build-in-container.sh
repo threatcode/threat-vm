@@ -60,7 +60,7 @@ OPTS+=(
     && OPTS+=(--user "$(stat --format="%u:%g" .)")
 
 if ! $CONTAINER inspect --type image $IMAGE >/dev/null 2>&1; then
-    vrun $CONTAINER build -t $IMAGE .
+    vrun $CONTAINER build --tag $IMAGE .
     echo
 fi
 
