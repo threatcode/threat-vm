@@ -43,6 +43,8 @@ USERPASS=
 VARIANT=
 VERSION=
 ZIP=false
+MEMORY=4G
+SCARTCHSIZE=45G
 
 default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] \
     && echo headless \
@@ -252,15 +254,6 @@ else
     set -- "$@" --artifactdir=$OUTDIR
 fi
 
-# Set some options for debos, unless it was already set by the caller.
-# Regarding the scratch size needed to build a Kali Linux image from scratch
-# (ie. in one step, no intermediary rootfs), using the kali-rolling branch, the
-# XFCE desktop, and changing only the toolset: default toolset requires 14G,
-# large toolset 24G and everything toolset 40G. That was back in June 2022.
-echo "$@" | grep -q -e "-m[= ]" -e "--memory[= ]" \
-    || set -- "$@" --memory=4G
-echo "$@" | grep -q -e "--scratchsize[= ]" \
-    || set -- "$@" --scratchsize=45G
 
 # Validate the variant.
 in_list $VARIANT $SUPPORTED_VARIANTS || fail_invalid -v $VARIANT
@@ -332,6 +325,18 @@ in_list $ARCH $SUPPORTED_ARCHITECTURES || fail_invalid -a $ARCH
 # Validate size and add the "GB" suffix
 [[ $SIZE =~ ^[0-9]+$ ]] && SIZE=${SIZE}GB \
     || fail_invalid -s $SIZE "must contain only digits"
+# Amount of memory to use
+echo "$@" | grep -q -e "--memory[= ]" \
+    || set -- "$@" --memory=$MEMORY
+
+# The scratchsize needed to build a Kali Linux image from scratch
+# (ie. in one step, no intermediary rootfs) using on June 2022:
+# - kali-rolling branch & XFCE desktop
+#   - Default toolset: 14G
+#   - Large toolset: 24G
+#   - Everything toolset: 40G
+echo "$@" | grep -q -e "--scratchsize[= ]" \
+    || set -- "$@" --scratchsize=$SCARTCHSIZE
 
 # Order packages alphabetically, separate each package with ", "
 PACKAGES=$(echo $PACKAGES \
