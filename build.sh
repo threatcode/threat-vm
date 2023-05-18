@@ -31,7 +31,6 @@ FORMAT=
 KEEP=false
 LOCALE=
 MIRROR=
-OUTDIR=
 PACKAGES=
 PASSWORD=
 ROOTFS=
@@ -43,6 +42,7 @@ USERPASS=
 VARIANT=
 VERSION=
 ZIP=false
+OUTDIR=images
 MEMORY=4G
 SCARTCHSIZE=45G
 
@@ -251,15 +251,6 @@ while getopts ":a:b:D:f:hkL:m:P:r:s:T:U:v:x:zZ:" opt; do
 done
 shift $((OPTIND - 1))
 
-# What's left on the command-line are optional arguments for debos.
-# Let's check if user wants to use a particular artifact directory.
-ARTIFACTDIR_ARG=$(echo "$@" | grep -o -- "--artifactdir[= ][^ ]\+" || :)
-if [ "$ARTIFACTDIR_ARG" ]; then
-    OUTDIR=$(echo "$ARTIFACTDIR_ARG" | sed "s/^.*[= ]//")
-else
-    OUTDIR=images
-    set -- "$@" --artifactdir=$OUTDIR
-fi
 
 
 # Validate the variant.
@@ -328,6 +319,16 @@ unset USERPASS
 
 # Validate architecture
 in_list $ARCH $SUPPORTED_ARCHITECTURES || fail_invalid -a $ARCH
+# What's left on the command-line are optional arguments for debos
+# We will set some options for debos, unless it was already set by the caller
+# There is less validation done on these inputs
+
+# Let's check if user wants to use a particular artifact directory
+ARTIFACTDIR_ARG=$(echo "$@" | grep -o -- "--artifactdir[= ][^ ]\+" || :)
+if [ "$ARTIFACTDIR_ARG" ]; then
+   OUTDIR=$(echo "$ARTIFACTDIR_ARG" | sed "s/^.*[= ]//")
+fi
+set -- "$@" --artifactdir=$OUTDIR
 
 # Validate size and add the "GB" suffix
 [[ $SIZE =~ ^[0-9]+$ ]] && SIZE=${SIZE}GB \
