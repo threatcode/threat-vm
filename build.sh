@@ -298,7 +298,7 @@ if [ "$ROOTFS" ]; then
     [ "$TOOLSET"  ] && fail_mismatch -T -r
     [ "$USERPASS" ] && fail_mismatch -U -r
     [ "$VERSION"  ] && fail_mismatch -x -r
-    [ $VARIANT != rootfs ] || fail_mismatch -r "'-v rootfs'"
+    [ "$VARIANT" != rootfs ] || fail_mismatch -r "'-v rootfs'"
     [ "$(dirname $ROOTFS)" = "$OUTDIR" ] || fail "rootfs must be within: $OUTDIR"
     ROOTFS=$(basename $ROOTFS)
     ARCH=$(echo $ROOTFS | sed "s/\.tar\.gz$//" | rev | cut -d- -f1 | rev)
@@ -315,7 +315,7 @@ else
     [ "$VARIANT"  ] || VARIANT=$DEFAULT_VARIANT
     [ "$VERSION"  ] || VERSION=$(default_version)
     # Set locale and timezone
-    [ "$LOCALE" = same ] && LOCALE=$(get_locale)
+    [ "$LOCALE" = same   ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
     # Unpack USERPASS to USERNAME and PASSWORD
     echo $USERPASS | grep -q ":" \
