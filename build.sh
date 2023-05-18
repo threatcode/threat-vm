@@ -213,9 +213,9 @@ The different formats are:
   vmware      2GbMaxExtentSparse VMDK disk image, VMX metadata file
 
 Supported environment variables:
-  http_proxy  HTTP proxy URL, refer to the README for more details.
+  http_proxy  HTTP proxy URL, refer to the README.md for more details
 
-Refer to the README for examples.
+Refer to the README.md for examples
 "
 
 while getopts ":a:b:D:f:hkL:m:P:r:s:T:U:v:x:zZ:" opt; do
