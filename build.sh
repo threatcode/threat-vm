@@ -164,11 +164,6 @@ ask_confirmation() {
     esac
 }
 
-# No need to be root, but the message doesn't make much sense in containers
-if [ $(id -u) -eq 0 ] && [ ! -e /run/.containerenv ] && [ ! -e /.dockerenv ]; then
-    warn "This script does not require root privileges."
-    warn "Please consider running it as a non-root user."
-fi
 create_vm() {
     mkdir -pv "$OUTDIR/"
     rm -fv "$OUTDIR/.artifacts"
@@ -402,6 +397,14 @@ if ! [ -v http_proxy ]; then
         export http_proxy="http://10.0.2.2:$port"
         break
     done <<< "$KNOWN_CACHING_PROXIES"
+fi
+
+# No need to be root, but the message doesn't make much sense in containers
+if [ $(id -u) -eq 0 ] && \
+   [ ! -e /run/.containerenv ] && \
+   [ ! -e /.dockerenv ]; then
+    warn "This script does not require root privileges"
+    warn "Please consider running it as a non-root user"
 fi
 
 # Print a summary
