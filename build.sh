@@ -65,8 +65,8 @@ else
     _reset=
 fi
 b() { echo -n "${_bold}$@${_reset}"; }
-warn() { echo "WARNING:" "$@" >&2; }
-fail() { echo "ERROR:" "$@" >&2; exit 1; }
+fail() { echo "ERROR: $@"   1>&2; exit 1; }
+warn() { echo "WARNING: $@" 1>&2; }
 
 fail_invalid() {
     local msg="Invalid value '$2' for option $1"
