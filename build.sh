@@ -285,28 +285,6 @@ while getopts ":a:b:D:f:hkL:m:P:r:s:T:U:v:x:zZ:" opt; do
 done
 shift $((OPTIND - 1))
 
-
-
-# Validate the variant.
-in_list $VARIANT $SUPPORTED_VARIANTS || fail_invalid -v $VARIANT
-
-# If format was not set, choose a sensible default according to the variant.
-# Moreover, there should be no format when building a rootfs.
-if [ $VARIANT != rootfs ]; then
-    if [ -z "$FORMAT" ]; then
-        case $VARIANT in
-            (generic)    FORMAT=raw ;;
-            (qemu)       FORMAT=qemu ;;
-            (virtualbox) FORMAT=virtualbox ;;
-            (vmware)     FORMAT=vmware ;;
-            (*) fail_invalid -v $VARIANT ;;
-        esac
-    fi
-    in_list $FORMAT $SUPPORTED_FORMATS || fail_invalid -f $FORMAT
-else
-    [ -z "$FORMAT" ] || fail_mismatch -f "'-v rootfs'"
-fi
-
 # When building an image from an existing rootfs, ARCH and VERSION are picked
 # from the rootfs name. Moreover, many options don't apply, as they've been
 # set already at the time the rootfs was built.
@@ -339,10 +317,6 @@ else
     # Set locale and timezone
     [ "$LOCALE" = same ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
-    # Validate some options
-    in_list $BRANCH $SUPPORTED_BRANCHES || fail_invalid -b $BRANCH
-    in_list $DESKTOP $SUPPORTED_DESKTOPS || fail_invalid -D $DESKTOP
-    in_list $TOOLSET $SUPPORTED_TOOLSETS || fail_invalid -T $TOOLSET
     # Unpack USERPASS to USERNAME and PASSWORD
     echo $USERPASS | grep -q ":" \
         || fail_invalid -U $USERPASS "must be of the form <username>:<password>"
@@ -351,8 +325,25 @@ else
 fi
 unset USERPASS
 
-# Validate architecture
-in_list $ARCH $SUPPORTED_ARCHITECTURES || fail_invalid -a $ARCH
+# If format was not set, choose a sensible default according to the variant
+# Moreover, there should be no format when building a rootfs
+if [ $VARIANT != rootfs ]; then
+    if [ -z "$FORMAT" ]; then
+        case $VARIANT in
+            (generic)    FORMAT=raw;;
+            (qemu)       FORMAT=qemu;;
+            (virtualbox) FORMAT=virtualbox;;
+            (vmware)     FORMAT=vmware;;
+            (*) fail_invalid -v $VARIANT;;
+        esac
+    fi
+    in_list $FORMAT $SUPPORTED_FORMATS \
+        || fail_invalid -f $FORMAT
+else
+    [ -z "$FORMAT" ] \
+       || fail_mismatch -f "'-v rootfs'"
+fi
+
 # What's left on the command-line are optional arguments for debos
 # We will set some options for debos, unless it was already set by the caller
 # There is less validation done on these inputs
@@ -364,9 +355,6 @@ if [ "$ARTIFACTDIR_ARG" ]; then
 fi
 set -- "$@" --artifactdir=$OUTDIR
 
-# Validate size and add the "GB" suffix
-[[ $SIZE =~ ^[0-9]+$ ]] && SIZE=${SIZE}GB \
-    || fail_invalid -s $SIZE "must contain only digits"
 # Amount of memory to use
 echo "$@" | grep -q -e "--memory[= ]" \
     || set -- "$@" --memory=$MEMORY
@@ -390,6 +378,27 @@ PACKAGES=$(echo $PACKAGES \
 # Attempt to detect well-known http caching proxies on localhost,
 # cf. bash(1) section "REDIRECTION". This is not bullet-proof.
 if ! [ -v http_proxy ]; then
+# Validate some options
+in_list $VARIANT $SUPPORTED_VARIANTS \
+    || fail_invalid -v $VARIANT
+
+in_list $BRANCH $SUPPORTED_BRANCHES \
+    || fail_invalid -v $BRANCH
+
+in_list $DESKTOP $SUPPORTED_DESKTOPS \
+   || fail_invalid -v $DESKTOP
+
+in_list $TOOLSET $SUPPORTED_TOOLSETS \
+    || fail_invalid -v $TOOLSET
+
+in_list $ARCH $SUPPORTED_ARCHITECTURES \
+    || fail_invalid -v $ARCH
+
+# Validate size and add the "GB" suffix
+[[ $SIZE =~ ^[0-9]+$ ]] \
+    && SIZE=${SIZE}GB \
+    || fail_invalid -s $SIZE "must contain only digits"
+
     while read port proxy; do
         (</dev/tcp/localhost/$port) 2>/dev/null \
             || continue
