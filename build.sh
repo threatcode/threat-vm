@@ -164,6 +164,7 @@ ask_confirmation() {
     esac
 }
 
+# create_vm
 create_vm() {
     mkdir -pv "$OUTDIR/"
     rm -fv "$OUTDIR/.artifacts"
@@ -287,7 +288,7 @@ shift $((OPTIND - 1))
 
 # When building an image from an existing rootfs, ARCH and VERSION are picked
 # from the rootfs name. Moreover, many options don't apply, as they've been
-# set already at the time the rootfs was built.
+# set already at the time the rootfs was built
 if [ "$ROOTFS" ]; then
     [ "$ARCH"     ] && fail_mismatch -a -r
     [ "$BRANCH"   ] && fail_mismatch -b -r
@@ -304,6 +305,7 @@ if [ "$ROOTFS" ]; then
     ARCH=$(echo $ROOTFS | sed "s/\.tar\.gz$//" | rev | cut -d- -f1 | rev)
     VERSION=$(echo $ROOTFS | sed -E "s/^rootfs-(.*)-$ARCH\.tar\.gz$/\1/")
 else
+    # If there isn't any variables setup, use default
     [ "$ARCH"     ] || ARCH=$DEFAULT_ARCH
     [ "$BRANCH"   ] || BRANCH=$DEFAULT_BRANCH
     [ "$DESKTOP"  ] || DESKTOP=$DEFAULT_DESKTOP
@@ -314,7 +316,6 @@ else
     [ "$USERPASS" ] || USERPASS=$DEFAULT_USERPASS
     [ "$VARIANT"  ] || VARIANT=$DEFAULT_VARIANT
     [ "$VERSION"  ] || VERSION=$(default_version)
-    # Set locale and timezone
     [ "$LOCALE" = same   ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
     # Unpack USERPASS to USERNAME and PASSWORD
@@ -396,6 +397,7 @@ in_list $ARCH $SUPPORTED_ARCHITECTURES \
     && SIZE=${SIZE}GB \
     || fail_invalid -s $SIZE "must contain only digits"
 
+# Check environment variables for http_proxy
 # [ -v ... ] isn't supported on all every bash version
 if ! [ $(env | grep http_proxy) ]; then
     # Attempt to detect well-known http caching proxies on localhost,
@@ -404,6 +406,7 @@ if ! [ $(env | grep http_proxy) ]; then
         (</dev/tcp/localhost/$port) 2>/dev/null \
             || continue
         DETECTED_CACHING_PROXY="$port $proxy"
+        # Inside QEMU VM!
         export http_proxy="http://10.0.2.2:$port"
         break
     done <<< "$KNOWN_CACHING_PROXIES"
@@ -458,8 +461,10 @@ echo "# Build options:"
 ask_confirmation \
     || { echo "Abort"; exit 1; }
 
+# Build
 create_vm "$@"
 
+# Finish
 cat << EOF
 ..............
             ..,;:ccc,.
