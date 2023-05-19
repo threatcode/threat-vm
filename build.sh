@@ -258,11 +258,12 @@ The different formats are:
 Supported environment variables:
   http_proxy  HTTP proxy URL, refer to the README.md for more details
 
-Debos options:
+Most useful debos options:
   --artifactdir DIR   Set artifact directory, default: $(b $OUTDIR)
-  --memory      SIZE  Limit amount of memory to build VM in GB, default: $(b $MEMORY)
+  --memory, -m  SIZE  Limit amount of memory to build VM in GB, default: $(b $MEMORY)
   --scratchsize SIZE  Limit amount of HDD to build VM in GB, default: $(b $SCRATCHSIZE)
   --debug-shell       Get a shell on the VM
+  --help, -h          See the complete list of options for debos
 
 Refer to the README.md for examples
 "
@@ -362,7 +363,7 @@ fi
 set -- "$@" --artifactdir=$OUTDIR
 
 # Amount of memory to use
-echo "$@" | grep -q -e "--memory[= ]" \
+echo "$@" | grep -q -e "-m[= ]" -e "--memory[= ]" \
     || set -- "$@" --memory=$MEMORY
 
 # The scratchsize needed to build a Kali Linux image from scratch
