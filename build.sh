@@ -48,7 +48,7 @@ VERSION=
 ZIP=false
 OUTDIR=output
 MEMORY=4G
-SCARTCHSIZE=45G
+SCRATCHSIZE=45G
 
 default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] \
     && echo headless \
@@ -261,7 +261,7 @@ Supported environment variables:
 Debos options:
   --artifactdir DIR   Set artifact directory, default: $(b $OUTDIR)
   --memory      SIZE  Limit amount of memory to build VM in GB, default: $(b $MEMORY)
-  --scratchsize SIZE  Limit amount of HDD to build VM in GB, default: $(b $SCARTCHSIZE)
+  --scratchsize SIZE  Limit amount of HDD to build VM in GB, default: $(b $SCRATCHSIZE)
   --debug-shell       Get a shell on the VM
 
 Refer to the README.md for examples
@@ -372,7 +372,7 @@ echo "$@" | grep -q -e "--memory[= ]" \
 #   - Large toolset: 24G
 #   - Everything toolset: 40G
 echo "$@" | grep -q -e "--scratchsize[= ]" \
-    || set -- "$@" --scratchsize=$SCARTCHSIZE
+    || set -- "$@" --scratchsize=$SCRATCHSIZE
 
 # Order packages alphabetically, separate each package with ", "
 PACKAGES=$(echo $PACKAGES \
