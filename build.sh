@@ -78,7 +78,7 @@ point() { echo " * $@"; }
 
 fail_invalid() {
     local msg="Invalid value '$2' for option $1"
-    shift 2;
+    shift 2
     [ $# -gt 0 ] \
         && msg="$msg ($@)"
     fail "$msg"
@@ -86,16 +86,16 @@ fail_invalid() {
 
 fail_mismatch() {
     local msg="Option mismatch, $1 cannot be used together with $2"
-    shift 2;
+    shift 2
     [ $# -gt 0 ] \
         && msg="$msg ($@)"
     fail "$msg"
 }
 
 in_list() {
-    local word=$1 \
-        && shift
+    local word=$1
     local item=
+    shift
     for item in "$@"; do
         [ "$item" = "$word" ] \
             && return 0
@@ -107,7 +107,7 @@ kali_message() {
     local line=
     echo "┏━━($(b $@))"
     while IFS= read -r line; do
-        echo "┃ $line";
+        echo "┃ $line"
     done
     echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
@@ -338,11 +338,11 @@ unset USERPASS
 if [ $VARIANT != rootfs ]; then
     if [ -z "$FORMAT" ]; then
         case $VARIANT in
-            (generic)    FORMAT=raw;;
-            (qemu)       FORMAT=qemu;;
-            (virtualbox) FORMAT=virtualbox;;
-            (vmware)     FORMAT=vmware;;
-            (*) fail_invalid -v $VARIANT;;
+            (generic)    FORMAT=raw ;;
+            (qemu)       FORMAT=qemu ;;
+            (virtualbox) FORMAT=virtualbox ;;
+            (vmware)     FORMAT=vmware ;;
+            (*) fail_invalid -v $VARIANT ;;
         esac
     fi
     in_list $FORMAT $SUPPORTED_FORMATS \
@@ -359,7 +359,7 @@ fi
 # Let's check if user wants to use a particular artifact directory
 ARTIFACTDIR_ARG=$(echo "$@" | grep -o -- "--artifactdir[= ][^ ]\+" || :)
 if [ "$ARTIFACTDIR_ARG" ]; then
-   OUTDIR=$(echo "$ARTIFACTDIR_ARG" | sed "s/^.*[= ]//")
+    OUTDIR=$(echo "$ARTIFACTDIR_ARG" | sed "s/^.*[= ]//")
 fi
 set -- "$@" --artifactdir=$OUTDIR
 
