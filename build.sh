@@ -293,6 +293,10 @@ while getopts ":a:b:D:f:hkL:m:P:r:s:T:U:v:x:zZ:" opt; do
 done
 shift $((OPTIND - 1))
 
+# Set default variant
+[ "$VARIANT" ] \
+    || VARIANT=$DEFAULT_VARIANT
+
 # When building an image from an existing rootfs, ARCH and VERSION are picked
 # from the rootfs name. Moreover, many options don't apply, as they've been
 # set already at the time the rootfs was built
@@ -321,7 +325,6 @@ else
     [ "$TIMEZONE" ] || TIMEZONE=$DEFAULT_TIMEZONE
     [ "$TOOLSET"  ] || TOOLSET=$(default_toolset)
     [ "$USERPASS" ] || USERPASS=$DEFAULT_USERPASS
-    [ "$VARIANT"  ] || VARIANT=$DEFAULT_VARIANT
     [ "$VERSION"  ] || VERSION=$(default_version)
     [ "$LOCALE" = same   ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
