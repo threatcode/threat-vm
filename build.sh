@@ -46,8 +46,9 @@ USERPASS=
 VARIANT=
 VERSION=
 ZIP=false
-OUTDIR=output
+
 MEMORY=4G
+OUTDIR=output
 SCRATCHSIZE=45G
 
 default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] \
