@@ -431,7 +431,8 @@ echo "# Proxy configuration:"
 if [ "$DETECTED_CACHING_PROXY" ]; then
     read port proxy <<< $DETECTED_CACHING_PROXY
     point "Detected caching proxy $(b $proxy) on port $(b $port)"
-elif [ "${http_proxy:-}" ]; then
+fi
+if [ "${http_proxy:-}" ]; then
     point "Using proxy via environment variable: $(b http_proxy=$http_proxy)"
 else
     point "No http proxy configured, all packages will be downloaded from Internet"
