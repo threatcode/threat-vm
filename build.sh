@@ -12,8 +12,8 @@ SUPPORTED_BRANCHES="kali-dev kali-last-snapshot kali-rolling"
 SUPPORTED_DESKTOPS="e17 gnome i3 kde lxde mate none xfce"
 SUPPORTED_TOOLSETS="default everything headless large none"
 
-SUPPORTED_FORMATS="ova ovf raw qemu virtualbox vmware"
-SUPPORTED_VARIANTS="generic qemu rootfs virtualbox vmware"
+SUPPORTED_FORMATS="hyperv ova ovf qemu raw virtualbox vmware"
+SUPPORTED_VARIANTS="generic hyperv qemu rootfs virtualbox vmware"
 
 DEFAULT_ARCH=amd64
 DEFAULT_BRANCH=kali-rolling
@@ -253,6 +253,7 @@ if [ $VARIANT != rootfs ]; then
     if [ -z "$FORMAT" ]; then
         case $VARIANT in
             (generic)    FORMAT=raw ;;
+            (hyperv)     FORMAT=hyperv ;;
             (qemu)       FORMAT=qemu ;;
             (virtualbox) FORMAT=virtualbox ;;
             (vmware)     FORMAT=vmware ;;
@@ -262,6 +263,11 @@ if [ $VARIANT != rootfs ]; then
     in_list $FORMAT $SUPPORTED_FORMATS || fail_invalid -f $FORMAT
 else
     [ -z "$FORMAT" ] || fail_mismatch -f "'-v rootfs'"
+fi
+
+# Decide whether it will be a uefi image, according to the variant.
+if [ $VARIANT = hyperv ]; then
+    UEFI=true
 fi
 
 # When building an image from an existing rootfs, ARCH and VERSION are picked

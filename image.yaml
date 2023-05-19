@@ -86,12 +86,12 @@ actions:
     chroot: true
     script: scripts/install-virt-support.sh {{ $variant }}
 
-  {{ if eq $variant "vmware" }}
+{{ if or (eq $variant "vmware") (eq $variant "hyperv") }}
   - description: "Finish install for {{ $variant }}"
     action: run
     chroot: true
-    script: scripts/finish-install-vmware.sh
-  {{ end }}
+    script: scripts/finish-install-{{ $variant }}.sh
+{{ end }}
 
   - description: "Configure apt sources.list"
     action: run
