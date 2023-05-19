@@ -178,7 +178,7 @@ create_vm() {
     OUTPUT=kali-linux-$VERSION-$VARIANT-$ARCH
 
     if [ $VARIANT = rootfs ]; then
-        ROOTFS=$OUTPUT
+        ROOTFS=rootfs-$VERSION-$ARCH
         IMAGENAME=
     elif [ "$ROOTFS" ]; then
         ROOTFS=${ROOTFS%.tar.*}
