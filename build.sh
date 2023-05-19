@@ -407,7 +407,7 @@ in_list $ARCH $SUPPORTED_ARCHITECTURES \
 
 # Check environment variables for http_proxy
 # [ -v ... ] isn't supported on all every bash version
-if ! [ $(env | grep http_proxy) ]; then
+if ! [ "$(env | grep '^http_proxy=')" ]; then
     # Attempt to detect well-known http caching proxies on localhost,
     # cf. bash(1) section "REDIRECTION". This is not bullet-proof
     while read port proxy; do
