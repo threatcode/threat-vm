@@ -328,6 +328,13 @@ else
     [ "$VERSION"  ] || VERSION=$(default_version)
     [ "$LOCALE" = same   ] && LOCALE=$(get_locale)
     [ "$TIMEZONE" = same ] && TIMEZONE=$(get_timezone)
+    # Validate some options
+    in_list $BRANCH $SUPPORTED_BRANCHES \
+        || fail_invalid -v $BRANCH
+    in_list $DESKTOP $SUPPORTED_DESKTOPS \
+        || fail_invalid -v $DESKTOP
+    in_list $TOOLSET $SUPPORTED_TOOLSETS \
+        || fail_invalid -v $TOOLSET
     # Unpack USERPASS to USERNAME and PASSWORD
     echo $USERPASS | grep -q ":" \
         || fail_invalid -U $USERPASS "must be of the form <username>:<password>"
@@ -389,15 +396,6 @@ PACKAGES=$(echo $PACKAGES \
 # Validate some options
 in_list $VARIANT $SUPPORTED_VARIANTS \
     || fail_invalid -v $VARIANT
-
-in_list $BRANCH $SUPPORTED_BRANCHES \
-    || fail_invalid -v $BRANCH
-
-in_list $DESKTOP $SUPPORTED_DESKTOPS \
-   || fail_invalid -v $DESKTOP
-
-in_list $TOOLSET $SUPPORTED_TOOLSETS \
-    || fail_invalid -v $TOOLSET
 
 in_list $ARCH $SUPPORTED_ARCHITECTURES \
     || fail_invalid -v $ARCH
