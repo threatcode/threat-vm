@@ -29,7 +29,21 @@ qemu-img convert -O vhdx $image.raw $image.vhdx
 
 info "Create install-vm.bat"
 cat << 'EOF' > install-vm.bat
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& './create-vm.ps1'"
+@echo off
+
+REM Check for administrative privileges
+net file 1>nul 2>nul
+if "%errorlevel%" == "0" (goto admin)
+
+REM Generate request UAC
+:elevate
+powershell.exe Start-Process %~s0 -Verb runAs
+exit /B
+
+REM Run when administrative
+:admin
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command ""cd %~dp0; .\create-vm.ps1""
+pause
 EOF
 
 info "Generate create-vm.ps1"
