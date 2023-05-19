@@ -15,8 +15,8 @@ SUPPORTED_ARCHITECTURES="amd64 i386"
 SUPPORTED_BRANCHES="kali-dev kali-last-snapshot kali-rolling"
 SUPPORTED_DESKTOPS="e17 gnome i3 kde lxde mate xfce none"
 SUPPORTED_TOOLSETS="default everything headless large none"
-SUPPORTED_FORMATS="ova ovf raw qemu virtualbox vmware"
-SUPPORTED_VARIANTS="generic qemu rootfs virtualbox vmware"
+SUPPORTED_FORMATS="hyperv ova ovf qemu raw virtualbox vmware"
+SUPPORTED_VARIANTS="generic hyperv qemu rootfs virtualbox vmware"
 
 DEFAULT_ARCH=amd64
 DEFAULT_BRANCH=kali-rolling
@@ -41,6 +41,7 @@ ROOTFS=
 SIZE=86
 TIMEZONE=
 TOOLSET=
+UEFI=
 USERNAME=
 USERPASS=
 VARIANT=
@@ -204,6 +205,7 @@ create_vm() {
         -t rootfs:$ROOTFS \
         -t timezone:$TIMEZONE \
         -t toolset:$TOOLSET \
+        -t uefi:$UEFI \
         -t username:$USERNAME \
         -t variant:$VARIANT \
         -t zip:$ZIP \
@@ -349,6 +351,7 @@ if [ $VARIANT != rootfs ]; then
     if [ -z "$FORMAT" ]; then
         case $VARIANT in
             (generic)    FORMAT=raw ;;
+            (hyperv)     FORMAT=hyperv ;;
             (qemu)       FORMAT=qemu ;;
             (virtualbox) FORMAT=virtualbox ;;
             (vmware)     FORMAT=vmware ;;
@@ -360,6 +363,11 @@ if [ $VARIANT != rootfs ]; then
 else
     [ -z "$FORMAT" ] \
        || fail_mismatch -f "'-v rootfs'"
+fi
+
+# Decide whether it will be a uefi image, according to the variant
+if [ $VARIANT = hyperv ]; then
+    UEFI=true
 fi
 
 # What's left on the command-line are optional arguments for debos

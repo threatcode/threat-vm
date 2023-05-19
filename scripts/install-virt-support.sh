@@ -5,20 +5,23 @@ set -eu
 variant=$1
 
 if dpkg -s kali-desktop-core 2>/dev/null | grep -q "ok installed"; then
+    hyperv="hyperv-daemons xrdp"
     qemu="qemu-guest-agent spice-vdagent"
     virtualbox="virtualbox-guest-x11"
     vmware="open-vm-tools-desktop"
 else
+    hyperv="hyperv-daemons"
     qemu="qemu-guest-agent"
     virtualbox="virtualbox-guest-utils"
     vmware="open-vm-tools"
 fi
 
-generic=$(echo $qemu $virtualbox $vmware \
+generic=$(echo $hyperv $qemu $virtualbox $vmware \
     | sed "s/ \+/\n/g" | LC_ALL=C sort -u \
     | awk 'ORS=" "' | sed "s/ *$//")
 
 case $variant in
+    hyperv)     pkgs=$hyperv ;;
     qemu)       pkgs=$qemu ;;
     virtualbox) pkgs=$virtualbox ;;
     vmware)     pkgs=$vmware ;;
