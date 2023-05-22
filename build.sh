@@ -49,7 +49,7 @@ VERSION=
 ZIP=false
 
 MEMORY=4G
-OUTDIR=output
+OUTDIR=images
 SCRATCHSIZE=45G
 
 default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] \
