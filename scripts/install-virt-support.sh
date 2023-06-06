@@ -10,6 +10,11 @@ pkg_installed() {
 
 if pkg_installed kali-desktop-core; then
     hyperv="hyperv-daemons xrdp"
+    if pkg_installed pipewire; then
+        hyperv="$hyperv pipewire-module-xrdp"
+    elif pkg_installed pulseaudio; then
+        hyperv="$hyperv pulseaudio-module-xrdp"
+    fi
     qemu="qemu-guest-agent spice-vdagent"
     virtualbox="virtualbox-guest-x11"
     vmware="open-vm-tools-desktop"
