@@ -258,7 +258,7 @@ It's possible to break the build in two steps.
 You can first build a rootfs with `./build.sh -v rootfs`, and then build an image based on this rootfs with `./build.sh -r ROOTFS_NAME.tar.gz`.
 It makes sense if you plan to build several image types, for example.
 
-## Troubleshooting
+## Troubleshooting the build
 
 ### Not enough memory
 
@@ -276,3 +276,9 @@ You can pass arguments to debos after the special character `--`, so if you need
 
 When debugging build failures, it's convenient to be dropped in a shell within the VM where the build takes place.
 This is possible by giving the option `--debug-shell` to debos: `./build.sh [...] -- --debug-shell`.
+
+## Troubleshooting at runtime
+
+### ovf not compatible with VMware ESXI
+
+This is a known issue, refer to <https://gitlab.com/kalilinux/build-scripts/kali-vm/-/issues/25#note_1301070132> for a workaround.
