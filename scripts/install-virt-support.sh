@@ -4,7 +4,11 @@ set -eu
 
 variant=$1
 
-if dpkg -s kali-desktop-core 2>/dev/null | grep -q "ok installed"; then
+pkg_installed() {
+    dpkg -s "$1" 2>/dev/null | grep -q "ok installed"
+}
+
+if pkg_installed kali-desktop-core; then
     hyperv="hyperv-daemons xrdp"
     qemu="qemu-guest-agent spice-vdagent"
     virtualbox="virtualbox-guest-x11"
