@@ -245,16 +245,18 @@ Customization options:
 
 The different variants of images are:
   generic     Image with all virtualization support pre-installed, default format: raw
+  hyperv      Image pre-configured for Hyper-V \"Enhanced Session Mode\", default format: hyperv
   qemu        Image with QEMU and SPICE guest agents pre-installed, default format: qemu
   rootfs      Not an image, a root filesystem (no bootloader/kernel), packed in a .tar.gz
   virtualbox  Image with VirtualBox guest utilities pre-installed, default format: virtualbox
   vmware      Image with Open VM Tools pre-installed, default format: vmware
 
 The different formats are:
+  hyperv      VHDX disk image, powershell install scripts
   ova         streamOptimized VMDK disk image, OVF metadata file, packed in a OVA archive
   ovf         monolithicSparse VMDK disk image, OVF metadata file
-  raw         sparse disk image, no metadata
   qemu        QCOW2 disk image, no metadata
+  raw         sparse disk image, no metadata
   virtualbox  VDI disk image, .vbox metadata file
   vmware      2GbMaxExtentSparse VMDK disk image, VMX metadata file
 

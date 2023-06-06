@@ -90,13 +90,13 @@ Build options:
   -b BRANCH   Kali branch used to build the image, default: kali-rolling
               Supported values: kali-dev kali-last-snapshot kali-rolling
   -f FORMAT   Format to export the image to, default depends on the VARIANT
-              Supported values: ova ovf raw qemu virtualbox vmware
+              Supported values: hyperv ova ovf qemu raw virtualbox vmware
   -k          Keep raw disk image and other intermediary build artifacts
   -m MIRROR   Mirror used to build the image, default: http://http.kali.org/kali
-  -r ROOTFS   Rootfs to use to build the image, default: none
+  -r ROOTFS   rootfs to use to build the image, default: none
   -s SIZE     Size of the disk image in GB, default: 86
   -v VARIANT  Variant of image to build (see below for details), default: generic
-              Supported values: generic qemu rootfs virtualbox vmware
+              Supported values: generic hyperv qemu rootfs virtualbox vmware
   -x VERSION  What to name the image release as, default: rolling
   -z          Zip images and metadata files after the build
 
@@ -112,27 +112,30 @@ Customization options:
 
 The different variants of images are:
   generic     Image with all virtualization support pre-installed, default format: raw
+  hyperv      Image pre-configured for Hyper-V "Enhanced Session Mode", default format: hyperv
   qemu        Image with QEMU and SPICE guest agents pre-installed, default format: qemu
   rootfs      Not an image, a root filesystem (no bootloader/kernel), packed in a .tar.gz
   virtualbox  Image with VirtualBox guest utilities pre-installed, default format: virtualbox
   vmware      Image with Open VM Tools pre-installed, default format: vmware
 
 The different formats are:
+  hyperv      VHDX disk image, powershell install scripts
   ova         streamOptimized VMDK disk image, OVF metadata file, packed in a OVA archive
   ovf         monolithicSparse VMDK disk image, OVF metadata file
-  raw         sparse disk image, no metadata
   qemu        QCOW2 disk image, no metadata
+  raw         sparse disk image, no metadata
   virtualbox  VDI disk image, .vbox metadata file
   vmware      2GbMaxExtentSparse VMDK disk image, VMX metadata file
 
 Supported environment variables:
   http_proxy  HTTP proxy URL, refer to the README.md for more details
 
-Debos options:
+Most useful debos options:
   --artifactdir DIR   Set artifact directory, default: images
-  --memory      SIZE  Limit amount of memory to build VM in GB, default: 4G
+  --memory, -m  SIZE  Limit amount of memory to build VM in GB, default: 4G
   --scratchsize SIZE  Limit amount of HDD to build VM in GB, default: 45G
   --debug-shell       Get a shell on the VM
+  --help, -h          See the complete list of options for debos
 
 Refer to the README.md for examples
 ```
