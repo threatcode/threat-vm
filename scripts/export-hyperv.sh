@@ -58,5 +58,5 @@ fi
 
 for fn in create-vm.ps1 install-vm.bat $image.*; do
     [ -e $fn ] || continue
-    [ $(stat -c %Y $fn) -ge $START_TIME ] && echo $fn
+    [ $(stat -c %Y $fn) -ge $START_TIME ] && echo $fn || :
 done > .artifacts

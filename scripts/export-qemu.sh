@@ -32,5 +32,5 @@ if [ $zip -eq 1 ]; then
 fi
 
 for fn in $image.*; do
-    [ $(stat -c %Y $fn) -ge $START_TIME ] && echo $fn
+    [ $(stat -c %Y $fn) -ge $START_TIME ] && echo $fn || :
 done > .artifacts
