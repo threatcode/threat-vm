@@ -46,7 +46,6 @@ actions:
     recipe: image.yaml
     variables:
       arch: {{ $arch }}
-      branch: {{ $branch }}
       format: {{ $format }}
       imagename: {{ $imagename }}
       imagesize: {{ $imagesize }}

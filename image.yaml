@@ -1,5 +1,4 @@
 {{- $arch := .arch }}
-{{- $branch := .branch }}
 {{- $format := .format }}
 {{- $imagename := .imagename }}
 {{- $imagesize := .imagesize }}
@@ -66,8 +65,8 @@ actions:
 {{ end }}
       - linux-image-generic
 
-{{ if and (eq $variant "hyperv") (eq $branch "kali-last-snapshot") }}
-  - description: "Upgrade to kernel from Kali rolling"
+{{ if eq $variant "hyperv" }}
+  - description: "Upgrade to kernel from Kali rolling if needed"
     action: run
     chroot: true
     script: scripts/upgrade-kernel-rolling.sh
