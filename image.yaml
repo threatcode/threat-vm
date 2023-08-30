@@ -108,7 +108,7 @@ actions:
     chroot: false
     script: scripts/cleanup-out.sh
 
-  {{ if eq $zip "true" }}
+{{ if eq $zip "true" }}
   - description: "Fill unallocated blocks with zeroes"
     action: run
     chroot: false
@@ -117,7 +117,7 @@ actions:
 {{ else }}
     script: scripts/zerofree.sh $IMAGE-part1
 {{ end }}
-  {{ end }}
+{{ end }}
 
   - description: "Export to a {{ $format }} image"
     label: "export-{{ $format }}"
