@@ -1,4 +1,5 @@
 {{- $arch := .arch }}
+{{- $branch := .branch }}
 {{- $format := .format }}
 {{- $imagename := .imagename }}
 {{- $imagesize := .imagesize }}
@@ -64,6 +65,13 @@ actions:
       - grub-pc
 {{ end }}
       - linux-image-generic
+
+{{ if and (eq $variant "hyperv") (eq $branch "kali-last-snapshot") }}
+  - description: "Upgrade to kernel from Kali rolling"
+    action: run
+    chroot: true
+    script: scripts/upgrade-kernel-rolling.sh
+{{ end }}
 
   - description: "Setup GRUB"
     action: run
