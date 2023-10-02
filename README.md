@@ -108,7 +108,7 @@ Customization options:
   -T TOOLSET  The selection of tools to include in the image, default: default
               Supported values: default everything headless large none
   -U USERPASS Username and password, separated by a colon, default: kali:kali
-  -Z TIMEZONE Set timezone, default: US/Eastern
+  -Z TIMEZONE Set timezone, default: America/New_York
 
 The different variants of images are:
   generic     Image with all virtualization support pre-installed, default format: raw
