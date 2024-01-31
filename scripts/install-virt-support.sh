@@ -8,7 +8,7 @@ pkg_installed() {
     dpkg -s "$1" 2>/dev/null | grep -q "ok installed"
 }
 
-if pkg_installed kali-desktop-core; then
+if pkg_installed threat-desktop-core; then
     hyperv="hyperv-daemons xrdp"
     if pkg_installed pipewire; then
         hyperv="$hyperv pipewire-module-xrdp"

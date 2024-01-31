@@ -7,7 +7,7 @@
 set -eu
 
 CONTAINER=${CONTAINER:-}
-IMAGE=kali-build/vm
+IMAGE=threat-build/vm
 OPTS=()
 
 # Use escape sequences only if both stdout/stderr are opened on a terminal

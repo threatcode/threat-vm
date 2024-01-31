@@ -17,5 +17,5 @@ ln -s /lib/systemd/system/xrdp.service
 ln -s /lib/systemd/system/xrdp-sesman.service
 
 # Configure xrdp
-# XXX Do it with kali-tweaks when it supports non-interactive mode
-/usr/lib/kali_tweaks/helpers/hyperv-enhanced-mode enable
+# XXX Do it with threat-tweaks when it supports non-interactive mode
+/usr/lib/threat_tweaks/helpers/hyperv-enhanced-mode enable

@@ -80,7 +80,7 @@ name=${disk_file%.*}
 
 arch=${name##*-}
 [ "$arch" ] || fail "Failed to get arch from image name '$name'"
-version=$(echo $name | sed -E 's/^kali-linux-(.+)-.+-.+$/\1/')
+version=$(echo $name | sed -E 's/^threat-linux-(.+)-.+-.+$/\1/')
 [ "$version" ] || fail "Failed to get version from image name '$name'"
 
 disk_capacity=$(get_virtual_disk_capacity $disk_path)
@@ -91,9 +91,9 @@ disk_uuid=$(get_vmdk_disk_uuid $disk_path)
 [ "$disk_uuid" ] || disk_uuid=$(cat /proc/sys/kernel/random/uuid)
 machine_uuid=$(cat /proc/sys/kernel/random/uuid)
 
-license="GPL v3 ~ https://www.kali.org/docs/policy/kali-linux-open-source-policy/"
-product="Kali Linux"
-product_url="https://www.kali.org/"
+license="GPL v3 ~ https://www.threatcode.github.io/docs/policy/threat-linux-open-source-policy/"
+product="Threat Linux"
+product_url="https://www.threatcode.github.io/"
 product_version="Rolling ($version)"
 vendor="OffSec"
 vendor_url="https://www.offsec.com/"

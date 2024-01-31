@@ -12,20 +12,20 @@ KNOWN_CACHING_PROXIES="\
 DETECTED_CACHING_PROXY=
 
 SUPPORTED_ARCHITECTURES="amd64 i386"
-SUPPORTED_BRANCHES="kali-dev kali-last-snapshot kali-rolling"
+SUPPORTED_BRANCHES="threat-dev threat-last-snapshot threat-rolling"
 SUPPORTED_DESKTOPS="e17 gnome i3 kde lxde mate xfce none"
 SUPPORTED_TOOLSETS="default everything headless large none"
 SUPPORTED_FORMATS="hyperv ova ovf qemu raw virtualbox vmware"
 SUPPORTED_VARIANTS="generic hyperv qemu rootfs virtualbox vmware"
 
 DEFAULT_ARCH=amd64
-DEFAULT_BRANCH=kali-rolling
+DEFAULT_BRANCH=threat-rolling
 DEFAULT_DESKTOP=xfce
 DEFAULT_LOCALE=en_US.UTF-8
-DEFAULT_MIRROR=http://http.kali.org/kali
+DEFAULT_MIRROR=http://threatcode.github.io/threat
 DEFAULT_TIMEZONE=America/New_York
 DEFAULT_TOOLSET=default
-DEFAULT_USERPASS=kali:kali
+DEFAULT_USERPASS=threat:threat
 DEFAULT_VARIANT=generic
 
 ARCH=
@@ -55,7 +55,7 @@ SCRATCHSIZE=45G
 default_toolset() { [ ${DESKTOP:-$DEFAULT_DESKTOP} = none ] \
     && echo headless \
     || echo $DEFAULT_TOOLSET; }
-default_version() { echo ${BRANCH:-$DEFAULT_BRANCH} | sed "s/^kali-//"; }
+default_version() { echo ${BRANCH:-$DEFAULT_BRANCH} | sed "s/^threat-//"; }
 get_locale() { [ -v $LANG ] \
     && echo $LANG \
     || echo $DEFAULT_LOCALE; }
@@ -104,7 +104,7 @@ in_list() {
     return 1
 }
 
-kali_message() {
+threat_message() {
     local line=
     echo "┏━━($(b $@))"
     while IFS= read -r line; do
@@ -177,7 +177,7 @@ create_vm() {
     rm -fv "$OUTDIR/.artifacts"
 
     # Filename structure for final file
-    OUTPUT=kali-linux-$VERSION-$VARIANT-$ARCH
+    OUTPUT=threat-linux-$VERSION-$VARIANT-$ARCH
 
     if [ $VARIANT = rootfs ]; then
         ROOTFS=rootfs-$VERSION-$ARCH
@@ -215,12 +215,12 @@ create_vm() {
 
 USAGE="Usage: $(basename $0) <options> [-- <debos options>]
 
-Build a Kali Linux VM image
+Build a Threat Linux VM image
 
 Build options:
   -a ARCH     Build an image for this architecture, default: $(b $DEFAULT_ARCH)
               Supported values: $SUPPORTED_ARCHITECTURES
-  -b BRANCH   Kali branch used to build the image, default: $(b $DEFAULT_BRANCH)
+  -b BRANCH   Threat branch used to build the image, default: $(b $DEFAULT_BRANCH)
               Supported values: $SUPPORTED_BRANCHES
   -f FORMAT   Format to export the image to, default depends on the VARIANT
               Supported values: $SUPPORTED_FORMATS
@@ -387,9 +387,9 @@ set -- "$@" --artifactdir=$OUTDIR
 echo "$@" | grep -q -e "-m[= ]" -e "--memory[= ]" \
     || set -- "$@" --memory=$MEMORY
 
-# The scratchsize needed to build a Kali Linux image from scratch
+# The scratchsize needed to build a Threat Linux image from scratch
 # (ie. in one step, no intermediary rootfs) using on June 2022:
-# - kali-rolling branch & XFCE desktop
+# - threat-rolling branch & XFCE desktop
 #   - Default toolset: 14G
 #   - Large toolset: 24G
 #   - Everything toolset: 40G
@@ -453,12 +453,12 @@ fi
 
 echo "# VM output:"
 if [ $VARIANT = rootfs ]; then
-    point "Build a Kali Linux $(b $VARIANT) for the $(b $ARCH) architecture"
+    point "Build a Threat Linux $(b $VARIANT) for the $(b $ARCH) architecture"
 else
     if [ "$ROOTFS" ]; then
-        point "Build a Kali Linux $(b $VARIANT) image based on $(b $ROOTFS)"
+        point "Build a Threat Linux $(b $VARIANT) image based on $(b $ROOTFS)"
     else
-        point "Build a Kali Linux $(b $VARIANT) image for the $(b $ARCH) architecture"
+        point "Build a Threat Linux $(b $VARIANT) image for the $(b $ARCH) architecture"
     fi
     point "Export the image to the $(b $FORMAT) format. Disk size: $(b $SIZE)"
 fi
@@ -474,7 +474,7 @@ echo "# Build options:"
 [ "$TIMEZONE" ] && point "timezone: $(b $TIMEZONE)"
 [ "$KEEP"     ] && point "keep temporary files: $(b $KEEP)"
 } \
-    | kali_message "Kali Linux VM Build"
+    | threat_message "Threat Linux VM Build"
 
 # Ask for confirmation before starting the build
 ask_confirmation \

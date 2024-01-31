@@ -21,7 +21,7 @@ name=${disk_file%.*}
 
 arch=${name##*-}
 [ "$arch" ] || fail "Failed to get arch from image name '$name'"
-version=$(echo $name | sed -E 's/^kali-linux-(.+)-.+-.+$/\1/')
+version=$(echo $name | sed -E 's/^threat-linux-(.+)-.+-.+$/\1/')
 [ "$version" ] || fail "Failed to get version from image name '$name'"
 
 case $arch in

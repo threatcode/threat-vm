@@ -18,8 +18,8 @@ Set-VMProcessor -VMName "$Name" -Count 2
 Enable-VMIntegrationService -VMName "$Name" -Name "Guest Service Interface"
 
 Write-Host ""
-Write-Host "Your Kali Linux virtual machine is ready."
+Write-Host "Your Threat Linux virtual machine is ready."
 Write-Host "In order to use it, please start: Hyper-V Manager"
 Write-Host "For more information please see:"
-Write-Host "  https://www.kali.org/docs/virtualization/import-premade-hyper-v/"
+Write-Host "  https://www.threatcode.github.io/docs/virtualization/import-premade-hyper-v/"
 Write-Host ""

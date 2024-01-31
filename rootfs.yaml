@@ -10,7 +10,7 @@
 {{- $toolset := .toolset }}
 {{- $username := .username }}
 
-{{- $hostname := or .hostname "kali" }}
+{{- $hostname := or .hostname "threat" }}
 
 architecture: {{ $arch }}
 
@@ -19,7 +19,7 @@ actions:
     mirror: {{ $mirror }}
     suite: {{ $branch }}
     components: [ main, contrib, non-free, non-free-firmware ]
-    keyring-file: kali-archive-keyring.gpg
+    keyring-file: threat-archive-keyring.gpg
 
   - description: "Install usr-is-merged (cf. debos #361 and #362)"
     action: apt
@@ -54,10 +54,10 @@ actions:
     action: apt
     recommends: true
     packages:
-      - kali-linux-core
-      - kali-linux-firmware
+      - threat-linux-core
+      - threat-linux-firmware
 {{ if ne $desktop "none" }}
-      - kali-desktop-{{ $desktop }}
+      - threat-desktop-{{ $desktop }}
 {{ end }}
 
 {{ if ne $toolset "none" }}
@@ -65,7 +65,7 @@ actions:
     action: apt
     recommends: true
     packages:
-      - kali-linux-{{ $toolset }}
+      - threat-linux-{{ $toolset }}
 {{ end }}
 
 {{ if ne $packages "" }}

@@ -1,25 +1,25 @@
-Kali Rolling (%version%) %platform%
+Threat Rolling (%version%) %platform%
 %date%
 
 - - - - - - - - - - - - - - - - - -
 
-Username: kali
-Password: kali
+Username: threat
+Password: threat
 (%kbdlayout%)
 
 - - - - - - - - - - - - - - - - - -
 
-* Kali Homepage:
-https://www.kali.org/
+* Threat Homepage:
+https://www.threatcode.github.io/
 
-* Kali Documentation:
-https://www.kali.org/docs/
+* Threat Documentation:
+https://www.threatcode.github.io/docs/
 
-* Kali Tools:
-https://www.kali.org/tools/
+* Threat Tools:
+https://www.threatcode.github.io/tools/
 
 * Forum/Community Support:
-https://forums.kali.org/
+https://forums.threatcode.github.io/
 
 * Community Chat:
-https://discord.kali.org
+https://discord.threatcode.github.io

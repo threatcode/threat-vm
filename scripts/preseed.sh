@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Mostly taken from Kali's fork of debian-installer/build/preseed.cfg
-# Duplicated at live-build-config/kali-config/common/includes.installer/preseed.cfg
+# Mostly taken from Threat's fork of debian-installer/build/preseed.cfg
+# Duplicated at live-build-config/threat-config/common/includes.installer/preseed.cfg
 
 set -e
 

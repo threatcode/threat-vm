@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Mimic tasksel definition of "standard packages" by excluding libraries.
-# Additionally, exclude standard packages that are not present in the Kali
-# images created by the Kali installer (the reason why they're not present
+# Additionally, exclude standard packages that are not present in the Threat
+# images created by the Threat installer (the reason why they're not present
 # is unknown).
 
 set -eu

@@ -1,5 +1,5 @@
-## REF: https://hub.docker.com/r/kalilinux/kali-rolling
-FROM docker.io/kalilinux/kali-rolling
+## REF: https://hub.docker.com/r/threatos/threat-rolling
+FROM docker.io/threatos/threat-rolling
 
 RUN apt-get --quiet update && \
 ## Install packages

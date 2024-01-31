@@ -1,6 +1,6 @@
-# Kali VM image builder
+# Threat VM image builder
 
-This is the build script to create the Kali Linux [Virtual Machine (VM)](https://www.kali.org/docs/virtualization/) images.
+This is the build script to create the Threat Linux [Virtual Machine (VM)](https://www.threatcode.github.io/docs/virtualization/) images.
 
 Currently there are two build methods are possible:
 
@@ -16,8 +16,8 @@ Make sure that the git repository is cloned locally:
 
 ```console
 $ sudo apt install -y git
-$ git clone https://gitlab.com/kalilinux/build-scripts/kali-vm.git
-$ cd kali-vm/
+$ git clone https://github.com/threatcode/build-scripts/threat-vm.git
+$ cd threat-vm/
 ```
 
 ### User setup
@@ -32,7 +32,7 @@ kvm:x:104:
 $
 $ # In the group
 $ grep kvm /etc/group
-kvm:x:104:kali
+kvm:x:104:threat
 ```
 
 If your username does not appear in the line returned, it means that you are not in the group, and you must add yourself to the `kvm` group:
@@ -82,17 +82,17 @@ The best starting point, as always, is the usage message:
 $ ./build.sh -h
 Usage: build.sh <options> [-- <debos options>]
 
-Build a Kali Linux VM image
+Build a Threat Linux VM image
 
 Build options:
   -a ARCH     Build an image for this architecture, default: amd64
               Supported values: amd64 i386
-  -b BRANCH   Kali branch used to build the image, default: kali-rolling
-              Supported values: kali-dev kali-last-snapshot kali-rolling
+  -b BRANCH   Threat branch used to build the image, default: threat-rolling
+              Supported values: threat-dev threat-last-snapshot threat-rolling
   -f FORMAT   Format to export the image to, default depends on the VARIANT
               Supported values: hyperv ova ovf qemu raw virtualbox vmware
   -k          Keep raw disk image and other intermediary build artifacts
-  -m MIRROR   Mirror used to build the image, default: http://http.kali.org/kali
+  -m MIRROR   Mirror used to build the image, default: http://threatcode.github.io/threat
   -r ROOTFS   rootfs to use to build the image, default: none
   -s SIZE     Size of the disk image in GB, default: 86
   -v VARIANT  Variant of image to build (see below for details), default: generic
@@ -107,7 +107,7 @@ Customization options:
   -P PACKAGES Install extra packages (comma/space separated list)
   -T TOOLSET  The selection of tools to include in the image, default: default
               Supported values: default everything headless large none
-  -U USERPASS Username and password, separated by a colon, default: kali:kali
+  -U USERPASS Username and password, separated by a colon, default: threat:threat
   -Z TIMEZONE Set timezone, default: America/New_York
 
 The different variants of images are:
@@ -142,9 +142,9 @@ Refer to the README.md for examples
 
 - - -
 
-The default options will build a [Kali rolling](https://www.kali.org/docs/general-use/kali-branches/) image, [default desktop](https://www.kali.org/docs/general-use/switching-desktop-environments/) and [default toolset](https://www.kali.org/docs/general-use/metapackages/) for AMD64 architecture.
+The default options will build a [Threat rolling](https://www.threatcode.github.io/docs/general-use/threat-branches/) image, [default desktop](https://www.threatcode.github.io/docs/general-use/switching-desktop-environments/) and [default toolset](https://www.threatcode.github.io/docs/general-use/metapackages/) for AMD64 architecture.
 
-This is a raw disk image, i.e. a plain binary image of the disk (which can be started with [QEMU](https://www.kali.org/docs/virtualization/install-qemu-guest-vm/)).
+This is a raw disk image, i.e. a plain binary image of the disk (which can be started with [QEMU](https://www.threatcode.github.io/docs/virtualization/install-qemu-guest-vm/)).
 
 Example:
 
@@ -154,18 +154,18 @@ $ ./build.sh
 
 - - -
 
-To build a Kali Linux image tailored for VMware.
+To build a Threat Linux image tailored for VMware.
 It means that it comes with the Open VM Tools pre-installed, and the image produced is ready to be imported "as is" in VMware.
 
-Also, we are going to build it from the [last stable release](https://www.kali.org/docs/general-use/kali-branches/) of Kali, and we will using GNOME as the desktop environment, rather than the usual default Xfce:
+Also, we are going to build it from the [last stable release](https://www.threatcode.github.io/docs/general-use/threat-branches/) of Threat, and we will using GNOME as the desktop environment, rather than the usual default Xfce:
 
 ```console
-./build.sh -v vmware -b kali-last-snapshot -D gnome
+./build.sh -v vmware -b threat-last-snapshot -D gnome
 ```
 
 - - -
 
-To build a Kali Linux image designed for VirtualBox.
+To build a Threat Linux image designed for VirtualBox.
 It comes with the VirtualBox guest utilities pre-installed, and the image can be imported "as is" in VirtualBox.
 
 Moreover, we want a 150 GB virtual disk, and we will install the "everything" tool selection:
@@ -176,7 +176,7 @@ Moreover, we want a 150 GB virtual disk, and we will install the "everything" to
 
 - - -
 
-To build a lightweight Kali image, which has no desktop environment and no default toolset.
+To build a lightweight Threat image, which has no desktop environment and no default toolset.
 This is a generic image, it comes with support for most VM engines out there.
 We will export it to the OVA format, suitable for both VMware and VirtualBox.
 
@@ -202,7 +202,7 @@ There is also a shortcut of `-Z same` to match the host system.
 To set the name and password for the unprivileged user, use the option `-U`.
 The value is a single string and the `:` is used to separate the username from the password.
 
-Here we will build a Kali image, and configure it to mimic the host system: same locale and same timezone and same username (with the password of `password`):
+Here we will build a Threat image, and configure it to mimic the host system: same locale and same timezone and same username (with the password of `password`):
 
 ```console
 ./build.sh -L same -Z same -U $USER:password
@@ -210,7 +210,7 @@ Here we will build a Kali image, and configure it to mimic the host system: same
 
 ### Variants and formats
 
-Different variants of image can be built, depending on what VM engine you want to run the Kali image in.
+Different variants of image can be built, depending on what VM engine you want to run the Threat image in.
 The VARIANT mostly defines what extra package gets installed into the image, to add support for a particular VM engine.
 Then the FORMAT defines what format for the virtual disk, and what additional metadata files to produce.
 
@@ -234,14 +234,14 @@ For other formats, the build produce separate files.
 They can be bundled together in a 7z archive with the option `-z`.
 
 There is also a `rootfs` type: this is not an image.
-It's simply a Kali Linux root filesystem tree, without the kernel and the bootloader, and packed in a `.tar.gz` archive.
+It's simply a Threat Linux root filesystem tree, without the kernel and the bootloader, and packed in a `.tar.gz` archive.
 The main use-case is to reuse it as input to build an OS image, and it's not meant to be used outside of the build system.
 
 ### Caching proxy configuration
 
 When building OS images, it is useful to have a caching mechanism in place, to avoid having to download all the packages from the Internet, again and again.
 To this effect, the build script attempts to detect known caching proxies that would be running on the local host, such as `apt-cacher-ng`, `approx` and `squid-deb-proxy`.
-Alternatively, you can setup a [local mirror](https://www.kali.org/docs/community/setting-up-a-kali-linux-mirror/).
+Alternatively, you can setup a [local mirror](https://www.threatcode.github.io/docs/community/setting-up-a-threat-linux-mirror/).
 
 To override this detection, you can export the environment variable `http_proxy` yourself.
 However, you should remember that the build happens within a QEMU Virtual Machine, therefore `localhost` in the build environment refers to the VM, not to the host.
@@ -281,4 +281,4 @@ This is possible by giving the option `--debug-shell` to debos: `./build.sh [...
 
 ### ovf not compatible with VMware ESXI
 
-This is a known issue, refer to <https://gitlab.com/kalilinux/build-scripts/kali-vm/-/issues/25#note_1301070132> for a workaround.
+This is a known issue, refer to <https://github.com/threatcode/build-scripts/threat-vm/-/issues/25#note_1301070132> for a workaround.
